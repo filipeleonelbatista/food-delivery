@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block head %}
+{{ super() }}
+{% endblock %}
+
+{% block page_content %}
+<!-- Page Heading -->
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Selecionar relatórios</h1>
+        <form action="{{ url_for('inicio.editarView') }}" method='POST'>         
+    
+        <div class="mb-2 mb-md-0">        
+            {{ form.salvar(class_="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm") }} 
+            {{ form.cancelar(class_="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm") }}
+        </div>
+      </div>
+    
+    <!-- Mensagens -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        <!-- Categories: success (green), info (blue), warning (yellow), danger (red) -->
+            {% if messages %}
+                {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    {{ message }}
+                </div>
+                {% endfor %}
+            {% endif %}
+    {% endwith %}
+    <!-- Mensagens -->
+
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Selecionar colunas</h6>
+        </div>
+        <div class="card-body">
+                <div class="row">
+                        <div class="col-sm">                        
+                            <div class="custom-control custom-checkbox">
+                                {{ form.cliente(class_="custom-control-input", checked=view.cliente) }}
+                                {{ form.cliente.label(class_="custom-control-label") }}
+                            </div>
+                            
+                        </div>
+                        <div class="col-sm">
+                            <div class="custom-control custom-checkbox">
+                                {{ form.funcionario(class_="custom-control-input", checked=view.funcionario) }}
+                                {{ form.funcionario.label(class_="custom-control-label") }}
+                            </div>
+                        </div>
+                            
+                    </div>
+                    <div class="row">
+                        <div class="col-sm">
+                            <div class="custom-control custom-checkbox">
+                                {{ form.pedido(class_="custom-control-input", checked=view.pedido) }}
+                                {{ form.pedido.label(class_="custom-control-label") }}
+                            </div>
+                        </div>
+                        <div class="col-sm">
+                            <div class="custom-control custom-checkbox">
+                                {{ form.estoque(class_="custom-control-input", checked=view.estoque) }}
+                                {{ form.estoque.label(class_="custom-control-label") }}
+                            </div>
+                        </div>
+                            
+                    </div>
+                    <div class="row">
+                        <div class="col-sm">
+                            <div class="custom-control custom-checkbox">
+                                {{ form.graficoPedidos(class_="custom-control-input", checked=view.graficoPedidos) }}
+                                {{ form.graficoPedidos.label(class_="custom-control-label") }}
+                            </div>
+                        </div>
+                            
+                    </div>
+        </div>
+    </div>
+      
+</form>
+
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+
+{% endblock %}

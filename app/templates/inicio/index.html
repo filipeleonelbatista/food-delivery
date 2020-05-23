@@ -1,0 +1,309 @@
+{% extends "base.html" %}
+
+{% block head %}
+{{ super() }}
+<style>
+  .cursor {
+    cursor: pointer !important;
+  }
+
+  .cursor:hover {
+    cursor: pointer !important;
+  }
+</style>
+{% endblock %}
+
+{% block page_content %}
+<!-- Page Heading -->
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+  <h1 class="h3 mb-0 text-gray-800">Pagina Inicial</h1>
+  <a href="{{url_for('inicio.editarView')}}" class="btn btn-sm btn-primary shadow-sm"><i
+      class="fas fa-download fa-sm text-white-50"></i> Selecionar Relatórios</a>
+</div>
+
+<!-- Mensagens -->
+{% with messages = get_flashed_messages(with_categories=true) %}
+<!-- Categories: success (green), info (blue), warning (yellow), danger (red) -->
+{% if messages %}
+{% for category, message in messages %}
+<div class="alert alert-{{ category }}">
+  <button type="button" class="close" data-dismiss="alert">&times;</button>
+  {{ message }}
+</div>
+{% endfor %}
+{% endif %}
+{% endwith %}
+<!-- Mensagens -->
+
+<div class="row">
+  <!-- Earnings (Monthly) Card Example -->
+  <div class="col-xl-3 col-md-6 mb-4">
+    <div class="card border-left-primary shadow h-100 py-2">
+      <div class="card-body">
+        <div class="row no-gutters align-items-center">
+          <div class="col mr-2">
+            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Ganhos Diarios</div>
+            <div class="h5 mb-0 font-weight-bold text-gray-800">R$ {{ ganhoDiario|replace(".",",") }}</div>
+          </div>
+          <div class="col-auto">
+            <i class="fas fa-calendar fa-2x text-gray-300"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Earnings (Monthly) Card Example -->
+  <div class="col-xl-3 col-md-6 mb-4">
+    <div class="card border-left-success shadow h-100 py-2">
+      <div class="card-body">
+        <div class="row no-gutters align-items-center">
+          <div class="col mr-2">
+            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Ganhos Mensais</div>
+            <div class="h5 mb-0 font-weight-bold text-gray-800">R$ {{ ganhoMensal|replace(".",",") }}</div>
+          </div>
+          <div class="col-auto">
+            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Earnings (Monthly) Card Example -->
+  <div class="col-xl-3 col-md-6 mb-4">
+    <div class="card border-left-info shadow h-100 py-2">
+      <div class="card-body">
+        <div class="row no-gutters align-items-center">
+          <div class="col mr-2">
+            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Pedidos Concluidos</div>
+            <div class="row no-gutters align-items-center">
+              <div class="col-auto">
+                <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">{{ pedidosDiaConcluidos }}/{{ pedidosDia }}
+                </div>
+              </div>
+              <div class="col">
+                <div class="progress progress-sm mr-2">
+                  <div class="progress-bar bg-info" role="progressbar" style="width: {{ percentualPedidos }}%"
+                    aria-valuenow="{{ percentualPedidos }}" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-auto">
+            <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pending Requests Card Example -->
+  <div class="col-xl-3 col-md-6 mb-4">
+    <div class="card border-left-warning shadow h-100 py-2">
+      <div class="card-body">
+        <div class="row no-gutters align-items-center">
+          <div class="col mr-2">
+            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Solicitações de pedidos</div>
+            <div class="h5 mb-0 font-weight-bold text-gray-800">18</div>
+          </div>
+          <div class="col-auto">
+            <i class="fas fa-comments fa-2x text-gray-300"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% if view.cliente == False and view.fornecedor == False and view.funcionario == False and view.pedido == False and view.orcamento == False and view.estoque == False and view.pagamentos == False and view.recebimentos == False and view.graficoPedidos == False %}
+<div class="text-center">
+  <h2>Nenhum relatório selecionado.</h2>
+  <p>Os relatórios ajudam a compreender sua empresa.</p>
+  <img src="{{ url_for('static', filename='admin/dash.png')}}" class="image-responsive" height="300"><br><br>
+
+  <a href="{{ url_for('inicio.editarView') }}"><button class="btn btn-sm btn-success">Selecione relatorios
+      agora!</button></a>
+  <br><br><br>
+</div>
+{% endif %}
+
+{% if view.graficoPedidos %}
+<div class="row">
+  <div class="col-sm-6">
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+      <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Solicitações de pedido</h6>
+      </div>
+      <div class="card-body">
+      </div>
+    </div>
+
+  </div>
+  <div class="col-sm-6">
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+      <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Pedidos para entrega</h6>
+      </div>
+      <div class="card-body">
+      </div>
+    </div>
+
+  </div>
+</div>
+<div class="row">
+
+  <!-- Area Chart -->
+  <div class="col-xl-12 col-lg-7">
+    <div class="card shadow mb-4">
+      <!-- Card Header - Dropdown -->
+      <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+        <h6 class="m-0 font-weight-bold text-primary">Ganhos</h6>
+        <div class="dropdown no-arrow">
+          <a class="dropdown-toggle d-flex align-items-center justify-content-center dropdown-colorized" ref="#" role="button" id="dropdownMenuLink" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">
+            <i class="fas fa-ellipsis-v"></i>
+          </a>
+          <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
+            <div class="dropdown-header">Filtrar por:</div>
+            <a id="ganhos-diarios" class="dropdown-item cursor active text-white" onclick="relatorio('1');">Ganhos
+              diarios</a>
+            <a id="ganhos-mensais" class="dropdown-item cursor" onclick="relatorio('2');">Ganhos mensais</a>
+            <div class="dropdown-divider"></div>
+            <a id="ganhos-totais" class="dropdown-item cursor" onclick="relatorio('3');">Todos os pedidos</a>
+          </div>
+        </div>
+      </div>
+      <!-- Card Body -->
+      <div class="card-body">
+        <canvas class="my-4" id="myChart" width="1500" height="380"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script src="{{ url_for('static', filename='moment.min.js') }}"></script>
+<script src="{{ url_for('static', filename='datetime-moment.js') }}"></script>
+<script src="{{ url_for('static', filename='tables.js') }}"></script>
+<script src="{{ url_for('static', filename='main.js') }}"></script>
+
+<style>
+  teste {
+    background-color: #7abaff;
+  }
+</style>
+{% if view.graficoPedidos %}
+<!-- Graphs -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
+<script>
+  var dadosGrafico =
+  {
+    type: 'bar',
+    data: {
+      labels: [],
+      datasets: [{
+        label: 'Pedidos Concluídos',
+        data: [],
+        lineTension: 0,
+        backgroundColor: '#7abaff',
+        borderColor: '#007bff',
+        borderWidth: 3,
+        pointBackgroundColor: '#007bff'
+      }]
+    },
+    options: {
+      title: {
+        display: false,
+        text: 'Pedidos'
+      },
+      responsive: true,
+      scales: {
+        xAxes: [{
+          stacked: true,
+        }],
+        yAxes: [{
+          stacked: true,
+          ticks: {
+            beginAtZero: true
+          }
+        }]
+      },
+      legend: {
+        display: true,
+      }
+    }
+  }
+
+  let grafico = document.getElementById('myChart')
+  var myChart = new Chart(grafico, dadosGrafico)
+  myChart.update();
+  relatorio(1)
+
+  function relatorio(status) {    
+
+    if (status == 1) {
+      document.getElementById("ganhos-diarios").classList.add("active")
+      document.getElementById("ganhos-diarios").classList.add("text-white")
+      document.getElementById("ganhos-mensais").classList.remove("text-white")
+      document.getElementById("ganhos-mensais").classList.remove("active")
+      document.getElementById("ganhos-totais").classList.remove("active")
+      document.getElementById("ganhos-totais").classList.remove("text-white")
+    }
+    if (status == 2) {
+      document.getElementById("ganhos-diarios").classList.remove("active")
+      document.getElementById("ganhos-diarios").classList.remove("text-white")
+      document.getElementById("ganhos-mensais").classList.add("text-white")
+      document.getElementById("ganhos-mensais").classList.add("active")
+      document.getElementById("ganhos-totais").classList.remove("active")
+      document.getElementById("ganhos-totais").classList.remove("text-white")
+    }
+    if (status == 3) {
+      document.getElementById("ganhos-diarios").classList.remove("active")
+      document.getElementById("ganhos-diarios").classList.remove("text-white")
+      document.getElementById("ganhos-mensais").classList.remove("text-white")
+      document.getElementById("ganhos-mensais").classList.remove("active")
+      document.getElementById("ganhos-totais").classList.add("active")
+      document.getElementById("ganhos-totais").classList.add("text-white")
+    }
+
+    fetch('/relatorios/ganhos/' + status).then(function (response) {
+      response.json().then(function (data) {
+
+        // limpar dadosGrafico
+        dadosGrafico.data.labels = []
+        dadosGrafico.data.datasets[0].data = []
+
+        var valor = 0.0
+
+        for (var i = 0; i < data.length; i++) {
+          valor = valor + parseFloat(data[i].data)
+          for (var j = 0; j < data.length; j++) {
+            if (data[i].idPedido != data[i].idPedido) {
+              if (data[i].label == data[j].label) {
+                valor = valor + parseFloat(data[j].data)
+              }
+            }
+          }
+
+          dadosGrafico.data.labels.push(data[i].label)
+          dadosGrafico.data.datasets[0].data.push(valor)
+        }
+
+        
+      
+      myChart.update();
+      })
+    })
+
+  }
+
+</script>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,206 @@
+{% extends "base.html" %}
+
+{% block head %}
+{{ super() }}
+{% endblock %}
+
+{% block page_content %}
+<!-- Page Heading -->
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Usuarios</h1>        
+        <div class="mb-2 mr-2">
+            <a href="{{ url_for('usuarios.cadastrar') }}"><button class="btn btn-sm btn-success shadow-sm">Cadastrar usuário</button></a>        
+            <a href="{{ url_for('usuarios.editarView') }}"> <button class="btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Selecionar colunas</button> </a>
+            <button class="btn btn-sm btn-primary shadow-sm" onclick="imprimir();">Imprimir lista</button>
+        </div>        
+      </div>
+    
+    <!-- Mensagens -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        <!-- Categories: success (green), info (blue), warning (yellow), danger (red) -->
+            {% if messages %}
+                {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    {{ message }}
+                </div>
+                {% endfor %}
+            {% endif %}
+    {% endwith %}
+    <!-- Mensagens -->
+
+
+{% if funcionarios == [] %}
+<div class="text-center">
+    <h2>Não há nenhum usuário cadastrado!</h2>
+    <p>Manter um cadastro de usuários ajuda na gestão interna na empresa.</p>
+    <img src="{{ url_for('static', filename='admin/usuarios.png')}}" class="image-responsive" height="300"><br><br>
+
+    <a href="{{ url_for('usuarios.cadastrar') }}"><button class="btn btn-sm btn-success">Cadastrar um usuário agora!</button></a>
+    <br><br><br>
+</div>
+{% else %}
+<div class="card shadow mb-4">
+        <div class="card-header py-3">
+          <h6 class="m-0 font-weight-bold text-primary">Usuários </h6>
+        </div>
+        <div class="card-body">
+                <div id="imprimir" class="table-responsive">
+                        <table id="example" class="display table table-bordered">
+                                <thead class="text-center text-black">
+                                    <tr>
+                                        {% if view.imagemView %}
+                                        <th></th>
+                                        {% endif %}
+                                        {% if view.nomeView %}
+                                        <th>Nome</th>
+                                        {% endif %}
+                                        {% if view.CPFView %}
+                                        <th>CPF</th>
+                                        {% endif %}
+                                        {% if view.enderecoView %}
+                                        <th>Endereço</th>
+                                        {% endif %}
+                                        {% if view.telefoneView %}
+                                        <th>Telefone</th>
+                                        {% endif %}
+                                        {% if view.celularView %}
+                                        <th>Celular</th> 
+                                        {% endif %}
+                                        {% if view.emailView %}
+                                        <th>Email principal</th>   
+                                        {% endif %}
+                                        <th>Perfil</th>   
+
+                                        <th>Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="text-center">
+                                  {% for funcionario in funcionarios %}
+                                    {% if current_user.perfilUsuario.id <= funcionario.perfilUsuario.id %}
+                                    {% if funcionario.perfilUsuario.id < 6 %}
+                                    <tr>
+                                            {% if view.imagemView %}
+                                            <td>
+                                                <img src="{{ url_for('static', filename='images/' + funcionario.imagem) }}" width="50px" class="rounded-circle z-depth-1-half">
+                                            </td>
+                                            {% endif %}
+                                            {% if view.nomeView %}
+                                            <td>{{ funcionario.nome }}</td>
+                                            {% endif %}
+                                            {% if view.CPFView %}
+                                            <td>{{ funcionario.CPF }}</td>
+                                            {% endif %}
+                                            {% if view.enderecoView %}
+                                            <td>    
+                                                {% set url = funcionario.endereco.endereco+", "+(funcionario.endereco.numero|string)+", "+funcionario.endereco.municipio+"-"+funcionario.endereco.uf+", "+funcionario.endereco.pais %}
+                                                <a target="_blank" href="https://www.google.com/maps/search/?api=1&query={{url|replace(',','%2C')|replace(' ','+')}}">
+                                                    
+                                                {{ funcionario.endereco.endereco }},
+                    
+                                                {% if view.numeroView %}
+                                                {{ funcionario.endereco.numero }}<br>
+                                                {% endif %}
+                    
+                                                {% if view.bairroView %}
+                                                {{ funcionario.endereco.bairro }}<br>
+                                                {% endif %}
+                    
+                                                {% if view.municipioView %}
+                                                {{ funcionario.endereco.municipio }}-
+                                                {% endif %}
+                    
+                                                {% if view.UFView %}
+                                                {{ funcionario.endereco.uf }}<br>
+                                                {% endif %}
+                    
+                                                {% if view.paisView %}
+                                                {{ funcionario.endereco.pais }}  <br>
+                                                {% endif %}
+                    
+                                                {% if view.complementoView %}
+                                                {{ funcionario.endereco.complemento }}<br>
+                                                {% endif %}
+                    
+                                                {% if view.CEPView %}
+                                                {{ funcionario.endereco.cep }}<br>
+                                                {% endif %}                            
+                                                </a>
+                                            </td>
+                                            {% endif %}
+                                            
+                                            {% if view.telefoneView %}
+                                            <td>
+                                                <a target="_blank" href="tel:{{ funcionario.telefone }}">
+                                                    {{ funcionario.telefone }}
+                                                </a>
+                                            </td>
+                                            {% endif %}
+                                            {% if view.celularView %}
+                                            <td>
+                                                <a target="_blank" href="tel:{{ funcionario.celular }}">
+                                                    {{ funcionario.celular }}
+                                                </a>
+                                            </td>
+                                            {% endif %}
+                                            {% if view.emailView %}
+                                            <td>
+                                                <a target="_blank" href="mailto:{{ funcionario.email }}">
+                                                    {{ funcionario.email }}
+                                                </a>
+                                            </td>   
+                                            {% endif %}
+                                            <td class="align-middle">
+                                                <button class="btn btn-sm btn-{{funcionario.perfilUsuario.cor}}">{{funcionario.perfilUsuario.nome}}</button>
+                                            </td>
+  
+                                            <td>
+                                                
+                                                <div class="btn-group">
+                                                    <button type="button" class="btn btn-sm btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                        Ações
+                                                    </button>
+                                                    <div class="dropdown-menu">
+                    
+                                                    <a class="dropdown-item" href="{{ url_for('usuarios.visualizar', id=funcionario.id) }}">
+                                                        <span class="fas fa-search" style="color:#3366ff" aria-hidden="true">
+                                                        </span>&nbspVisualizar</a>   
+                    
+                                                    <a class="dropdown-item" href="{{ url_for('usuarios.editar', id=funcionario.id) }}">
+                                                        <span class="fas fa-pencil-alt" style="color:green" aria-hidden="true"></span>
+                                                        </span>&nbspEditar</a>
+                                                    
+                                                    <a class="dropdown-item" href="{{ url_for('usuarios.excluir', id=funcionario.id) }}">
+                                                        <span class="fas fa-trash" style="color:red" aria-hidden="true">
+                                                        </span>&nbspExcluir</a>       
+                                                        
+                                                    <a class="dropdown-item" href="{{ url_for('usuarios.editarSenha', id=funcionario.id) }}">
+                                                        <span class="fas fa-key" style="color:black" aria-hidden="true">
+                                                        </span>&nbspAlterar senha</a>       
+                                                    </div>
+                                                    </a>
+                                                   
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    {% endif %}
+                                    {% endif %}
+                                    {% endfor %} 
+                                </tbody>
+                            </table>
+                  </div>
+    </div>
+</div>
+{% endif %}
+
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+
+<script src="{{ url_for('static', filename='moment.min.js') }}"></script>    
+<script src="{{ url_for('static', filename='datetime-moment.js') }}"></script>
+<script src="{{ url_for('static', filename='tables.js') }}"></script>
+<script src="{{ url_for('static', filename='main.js') }}"></script>
+
+{% endblock %}

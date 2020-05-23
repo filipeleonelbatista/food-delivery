@@ -1,0 +1,142 @@
+{% extends "base.html" %} {% block head %} {{ super() }} {% endblock %} {% block page_content %}
+
+<!-- Page Heading -->
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Pedidos</h1>
+    {% if pedidos != [] %}
+    <div class="mb-2 mr-2">
+        <a href="{{ url_for('pedidos.cadastroPedido') }}"><button class="btn btn-sm btn-success">Novo
+                Pedido</button></a>
+        <!-- <a href="{{ url_for('pedidos.cozinha') }}"><button class="btn btn-sm btn-outline-warning">Cozinha</button></a>
+                <a href="{{ url_for('pedidos.entrega') }}"><button class="btn btn-sm btn-outline-warning">Entregas</button></a> -->
+        <button class="btn btn-sm btn-outline-primary">Selecionar colunas</button>
+    </div>
+    {% endif %}
+</div>
+
+<!-- Mensagens -->
+{% with messages = get_flashed_messages(with_categories=true) %}
+<!-- Categories: success (green), info (blue), warning (yellow), danger (red) -->
+{% if messages %}
+{% for category, message in messages %}
+<div class="alert alert-{{ category }}">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    {{ message }}
+</div>
+{% endfor %}
+{% endif %}
+{% endwith %}
+<!-- Mensagens -->
+
+<div id="mensagemJs"> </div>
+
+
+{% if pedidos == [] %}
+<div class="text-center">
+    <h2>Não há nenhum pedido cadastrado!</h2>
+    <p>Pedidos são a forma mais rapida de finalizar uma venda e registrar. Não perca tempo, crie seu primeiro pedido
+        agora!</p>
+    <img src="{{ url_for('static', filename='admin/pedidos.png')}}" class="image-responsive" height="300"><br><br>
+
+    <a href="{{ url_for('pedidos.cadastroPedido') }}"><button class="btn btn-sm btn-success">Criar um
+            pedido</button></a>
+    <br><br><br>
+</div>
+{% else %}
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Usuários </h6>
+    </div>
+    <div class="card-body">
+
+        <div id="imprimir" class="table-responsive">
+            <table id="example" class="display table table-bordered">
+                <thead class="text-center text-black">
+                    <tr>
+                        <th>N°</th>
+                        <th>Cliente</th>
+                        <th>Telefone</th>
+                        <th>Endereco</th>
+                        <th>Valor Total</th>
+                        <th>Status do pedido</th>
+                        <th>Forma de pagamento</th>
+                        <th>Vendedor</th>
+                        <th>Ultima Alteração</th>
+                        <th>Observação</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody class="text-center">
+                    {% for pedido in pedidos %}
+                    <tr>
+                        <td>{{ pedido.id }}</td>
+                        {% for cliente in clientes %} {% if cliente.id == pedido.id_cliente %}
+                        <td>{{ cliente.nome }}</td>
+                        <td><a href="tel:{{ cliente.telefone }}">{{ cliente.telefone }}</a></td>
+                        <td>
+                            {% set url = cliente.endereco.endereco+", "+(cliente.endereco.numero|string)+", "+cliente.endereco.municipio+"-"+cliente.endereco.uf+", "+cliente.endereco.pais %}
+                            <a target="_blank"
+                                href="https://www.google.com/maps/search/?api=1&query={{url|replace(',','%2C')|replace(' ','+')}}">
+                                {{ url }} </a>
+                        </td>
+                        {% endif %} {% endfor %}
+                        <td>R$ {{ pedido.total }}</td>
+                        <td>
+                            <button type="button" class="btn btn-block btn-sm btn-{{ pedido.status.cor }}">
+                                {{ pedido.status.nome }}
+                            </button>
+                        </td>
+                        <td>{{ pedido.formaPagamento }}</td>
+                        <td>{{ pedido.responsavel.nome }}</td>
+                        <td>{{ pedido.dtUpdate.strftime('%d/%m/%Y %H:%M:%S') }}</td>
+                        <td>{{ pedido.observacao }}</td>
+                        <td>
+                            <div class="btn-group">
+
+                                <button type="button" class="btn btn-sm btn-primary dropdown-toggle"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Ações
+                                </button>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item"
+                                        href="{{ url_for('pedidos.visualizarPedido', id = pedido.id ) }}">
+                                        <span class="fas fa-search" style="color:#3366ff" aria-hidden="true">
+                                        </span>&nbspVisualizar</a>
+                                    <a class="dropdown-item"
+                                        href="{{ url_for('pedidos.editarPedido', id = pedido.id ) }}">
+                                        <span class="fas fa-pencil-alt" style="color:green" aria-hidden="true">
+                                        </span>&nbspEditar</a>
+                                    <a class="dropdown-item" href="{{ url_for('pedidos.imprimir', id = pedido.id ) }}">
+                                        <span class="fas fa-print" style="color:black" aria-hidden="true">
+                                        </span>&nbspImprimir pedido</a>
+                                    <a class="dropdown-item"
+                                        href="{{ url_for('pedidos.proxStatus', id = pedido.id ) }}">
+                                        <span class="fas fa-arrow-right" style="color:black" aria-hidden="true">
+                                        </span>&nbsp Proximo status</a>
+                                    <a class="dropdown-item"
+                                        href="{{ url_for('pedidos.excluirPedido', id = pedido.id ) }}">
+                                        <span class="far fa-trash-alt" style="color:red" aria-hidden="true">
+                                        </span>&nbspExcluir</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item"
+                                        href="{{ url_for('pedidos.imprimirOrcamento', id = pedido.id ) }}">
+                                        <span class="fas fa-print" style="color:black" aria-hidden="true">
+                                        </span>&nbspImprimir como Orçamento</a>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+{% endif %} {% endblock %} {% block scripts %} {{ super() }}
+<script src="{{ url_for('static', filename='moment.min.js') }}"></script>
+<script src="{{ url_for('static', filename='datetime-moment.js') }}"></script>
+<script src="{{ url_for('static', filename='tables.js') }}"></script>
+<script src="{{ url_for('static', filename='main.js') }}"></script>
+{% endblock %}

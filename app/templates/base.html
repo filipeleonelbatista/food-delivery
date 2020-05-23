@@ -1,0 +1,484 @@
+{% extends "bootstrap/base.html" %} {% block title %}Administração{% endblock %} {% block head %}
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="Description" content="Sistema de automação de restaurantes.">
+<link rel="shortcut icon" href="{{ url_for('static', filename='images/'+config.icon) }}">
+<meta name="author" content="">
+
+<!-- Custom fonts for this template-->
+<link href="{{ url_for('static', filename='components/vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet"
+    type="text/css">
+<link
+    href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+    rel="stylesheet">
+
+<!-- Custom styles for this template-->
+<link href="{{ url_for('static', filename='components/css/sb-admin-2.min.css') }}" rel="stylesheet">
+
+<!-- Custom styles for this page -->
+<link href="{{ url_for('static', filename='components/vendor/datatables/dataTables.bootstrap4.min.css') }}"
+    rel="stylesheet">
+
+
+
+
+<style>
+    ::-webkit-scrollbar-track {
+        background-color: #F4F4F4;
+    }
+
+    ::-webkit-scrollbar {
+        width: 6px;
+        background: #F4F4F4;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: #c7c7c7;
+    }
+
+    div#collapseTwo {
+        z-index: 100000 !important;
+    }
+
+.dropdown-colorized{
+    background-color: #dddddd!important;
+    border-radius: 50%; 
+    width: 30px; 
+    height: 30px;
+}
+.dropdown-colorized i{    
+    color: #d1d3e2!important;
+}
+
+.dropdown-colorized i:hover{   
+    color: #fff;
+}
+.dropdown-colorized:hover{
+    background-color: #4e73df!important;
+}
+</style>
+{% endblock %} {% block content %}
+
+
+<body id="page-top">
+
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+
+        <!-- Sidebar -->
+        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion toggled" id="accordionSidebar">
+
+            <!-- Sidebar - Brand -->
+            <a class="sidebar-brand d-flex align-items-center justify-content-center"
+                href="{{ url_for('inicio.index') }}">
+
+                <div class="sidebar-brand-icon">
+                    <!-- <i class="fas fa-power-off"></i> -->
+                    <i class="fas fa-utensils"></i>
+                </div>
+                <div class="sidebar-brand-text mx-3">
+                    <div class="row">{{config.nomeFantasia}}</div>
+                </div>
+            </a>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider my-0">
+
+            <!-- Nav Item - Dashboard -->
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('inicio.index') }}">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Pagina inicial</span></a>
+            </li>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider">
+
+            <!-- Heading -->
+            <div class="sidebar-heading">
+                Módulos
+            </div>
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
+                    aria-expanded="true" aria-controls="collapseTwo">
+                    <i class="fas fa-cash-register"></i>
+                    <span>Vendas</span>
+                </a>
+                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Principais ações:</h6>
+                        <a class="collapse-item" href="{{ url_for('pedidos.pdv') }}"><i
+                                class="fas fa-file-contract"></i> Ponto de
+                            venda</a>
+                        <a class="collapse-item" href="{{ url_for('pedidos.cadastroPedido') }}"><i
+                                class="far fa-file-powerpoint"></i> Criar pedidos</a>
+                        <a class="collapse-item" href="{{ url_for('pedidos.index') }}"><i class="far fa-file-alt"></i>
+                            Pedidos</a>
+                        <a class="collapse-item" href="{{ url_for('pedidos.cozinha') }}"><i class="fas fa-utensils"></i>
+                            Cozinha</a>
+                        <a class="collapse-item" href="{{ url_for('pedidos.entrega') }}"><i
+                                class="fas fa-motorcycle"></i>
+                            Entrega</a>
+                    </div>
+                </div>
+            </li>
+
+            <!-- Nav Item - Pages Collapse Menu -->
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('usuarios.clientes') }}">
+                    <i class="fas fa-user"></i>
+                    <span>Clientes</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('pedidos.index') }}">
+                    <i class="far fa-file-alt"></i>
+                    <span>Pedidos</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('usuarios.index') }}">
+                    <i class="fas fa-users"></i>
+                    <span>Usuários</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('estoque.index') }}">
+                    <i class="fas fa-user"></i>
+                    <span>Produtos</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('pedidos.entrega') }}">
+                    <i class="fas fa-motorcycle"></i>
+                    <span>Entrega</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('pedidos.cozinha') }}">
+                    <i class="fas fa-utensils"></i>
+                    <span>Cozinha</span></a>
+            </li>
+
+
+            <hr class="sidebar-divider">
+
+            <!-- 
+        <div class="sidebar-heading">
+          Financeiro
+        </div>    
+        
+        <li class="nav-item">
+          <a class="nav-link" href="#">
+                <i class="fas fa-hand-holding-usd"></i>
+            <span>Meus Ganhos</span></a>
+        </li>
+  
+        <hr class="sidebar-divider d-none d-md-block"> -->
+
+            <!-- Sidebar Toggler (Sidebar) -->
+            <div class="text-center d-none d-md-inline">
+                <button class="rounded-circle border-0" id="sidebarToggle"></button>
+            </div>
+
+        </ul>
+        <!-- End of Sidebar -->
+
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+
+            <!-- Main Content -->
+            <div id="content">
+
+                <!-- Topbar -->
+                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+
+                    <!-- Sidebar Toggle (Topbar) -->
+                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                        <i class="fa fa-bars"></i>
+                    </button>
+
+
+
+                    <!-- Topbar Navbar -->
+                    <ul class="navbar-nav ml-auto">
+                        <!-- Nav Item - Alerts -->
+                        <li class="nav-item dropdown no-arrow mx-1">
+                            <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fab fa-whatsapp"></i>
+                                <!-- Counter - Alerts -->
+                                <span class="badge badge-danger badge-counter">1</span>
+                            </a>
+                            <!-- Dropdown - Alerts -->
+                            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                                aria-labelledby="alertsDropdown">
+                                <h6 class="dropdown-header">
+                                    Mensagens Whatsapp
+                                </h6>
+                                <a class="dropdown-item d-flex align-items-center" href="#">
+                                    <div class="mr-3">
+                                        <div class="icon-circle bg-primary">
+                                            <i class="fab fa-whatsapp text-white"></i>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="small text-gray-500">Em breve</div>
+                                        <span class="font-weight-bold">Uma integração do seu restaurante pelo whatsapp.
+                                            Confirme seus pedidos por aqui e tenha mais tempo para tratar do seu
+                                            negócio!</span>
+                                    </div>
+                                </a>
+                                <a class="dropdown-item text-center small text-gray-500" href="#">Ver todas as mensagens
+                                    no Whatsapp</a>
+                            </div>
+                        </li>
+
+                        <!-- Posteriormente adicionar isso
+
+                        <li class="nav-item dropdown no-arrow mx-1">
+                            <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-shopping-cart"></i>
+                                
+                                <span class="badge badge-danger badge-counter">3+</span>
+                            </a>
+                            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="alertsDropdown">
+                                <h6 class="dropdown-header">
+                                    Solicitações de clientes
+                                </h6>
+                                <a class="dropdown-item d-flex align-items-center" href="#">
+                                    <div class="mr-3">
+                                        <div class="icon-circle bg-primary">
+                                            <i class="fas fa-file-alt text-white"></i>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="small text-gray-500">December 12, 2019</div>
+                                        <span class="font-weight-bold">A new monthly report is ready to download!</span>
+                                    </div>
+                                </a>
+                                <a class="dropdown-item d-flex align-items-center" href="#">
+                                    <div class="mr-3">
+                                        <div class="icon-circle bg-success">
+                                            <i class="fas fa-donate text-white"></i>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="small text-gray-500">December 7, 2019</div>
+                                        $290.29 has been deposited into your account!
+                                    </div>
+                                </a>
+                                <a class="dropdown-item d-flex align-items-center" href="#">
+                                    <div class="mr-3">
+                                        <div class="icon-circle bg-warning">
+                                            <i class="fas fa-exclamation-triangle text-white"></i>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="small text-gray-500">December 2, 2019</div>
+                                        Spending Alert: We've noticed unusually high spending for your account.
+                                    </div>
+                                </a>
+                                <a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>
+                            </div>
+                        </li>
+                    -->
+                        {% if dias < 7 %}
+                        <li class="nav-item dropdown no-arrow mx-1">
+                            <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-envelope fa-fw"></i>
+                                <span class="badge badge-danger badge-counter">2</span>
+                            </a>
+                            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                                aria-labelledby="messagesDropdown">
+                                <h6 class="dropdown-header">
+                                    Mensagens
+                                </h6>
+
+                                {% if dias < 7 %}
+                                <a class="dropdown-item d-flex align-items-center"
+                                    href="mailto:validacao@leonelinformatica.com.br">
+                                    <div class="dropdown-list-image mr-3">
+                                        <img class="rounded-circle"
+                                            src="{{ url_for('static', filename='images/default-user.jpg') }}" alt="">
+                                        <div class="status-indicator bg-success"></div>
+                                    </div>
+                                    <div class="font-weight-bold">
+                                        <div class="text-truncate" style="color:red">Sistema expira em {{dias}} dias.
+                                        </div>
+                                        <div class="small text-gray-500">Entre em contato com o adminsitrador</div>
+                                    </div>
+                                </a>
+
+                                {% endif %}
+                                <a class="dropdown-item text-center small text-gray-500" href="#">Ler mais mensagens</a>
+                            </div>
+                        </li>
+
+                        {% endif %}
+
+                        <div class="topbar-divider d-none d-sm-block"></div>
+
+                        <!-- Nav Item - User Information -->
+                        <li class="nav-item dropdown no-arrow">
+                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ current_user.nome }}</span>
+                                {% if current_user.imagem %}
+                                <img src="{{ url_for('static', filename='images/' + current_user.imagem) }}"
+                                    class="img-profile rounded-circle"> {% else %}
+                                <img src="{{ url_for('static', filename='images/default-user.jpg') }}"
+                                    class="img-profile rounded-circle"> {% endif %}
+
+                            </a>
+                            <!-- Dropdown - User Information -->
+                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                                aria-labelledby="userDropdown">
+                                <a class="dropdown-item"
+                                    href="{{ url_for('usuarios.visualizar', id=current_user.id) }}">
+                                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i> Meu perfil
+                                </a>
+                                <a class="dropdown-item" href="{{ url_for('inicio.vcard') }}">
+                                    <i class="fas fa-id-card fa-sm fa-fw mr-2 text-gray-400"></i> Cartão de visitas
+                                </a>
+                                <a class="dropdown-item" href="{{ url_for('configuracao.index') }}">
+                                    <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i> Configurações
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#ErroModal">
+                                    <i class="fas fa-bug fa-sm fa-fw mr-2 text-gray-400"></i> Informar um erro
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i> Sair
+                                </a>
+                            </div>
+                        </li>
+
+                    </ul>
+
+                </nav>
+                <!-- End of Topbar -->
+
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
+
+                    {% block page_content %}{% endblock %}
+
+                </div>
+                <!-- /.container-fluid -->
+
+            </div>
+            <!-- End of Main Content -->
+
+            <!-- Footer -->
+            <footer class="sticky-footer bg-white">
+                <div class="container my-auto">
+                    <div class="copyright text-center my-auto">
+                        <span>Desenvolvido por &copy; <a href="https://leonelinformatica.com.br">Leonel Informatica</a>
+                            <br> Versão
+                            {{ config.versao }}</span>
+                    </div>
+                </div>
+            </footer>
+            <!-- End of Footer -->
+
+        </div>
+        <!-- End of Content Wrapper -->
+
+    </div>
+    <!-- End of Page Wrapper -->
+
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+
+    <!-- Logout Modal-->
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="logoutModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="logoutModalLabel">Voce realmente deseja sair?</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">Se deseja sair, clique em sair a baixo ou se preferir permadecer no sistema
+                    clique em cancelar.
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
+                    <a class="btn btn-primary" href="{{ url_for('auth.logout') }}">Sair</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END LOGOUT MODAL -->
+
+    <!-- ERRO Modal-->
+    <div class="modal fade" id="ErroModal" tabindex="-1" role="dialog" aria-labelledby="ErroModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="ErroModalLabel">Informar problema</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <textarea class="form-control" required id="messageBug" placeholder="Escreva aqui seu problema"></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-success" type="button" onclick="relatarErro('{{current_user.nome}}',
+                                                                                   '{{current_user.telefone}}', 
+                                                                                   '{{current_user.email}}',
+                                                                                   '{{config.nomeFantasia}}',
+                                                                                    document.getElementById('messageBug').value
+                                                                                   );"
+                        data-dismiss="modal">Enviar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function relatarErro(nome, telefone, email, nomeFantasia, corpo) {
+            const github = `https://api.github.com/repos/modernfunkboss/my-issues/issues/`;
+            const token = "7ab684801b8c399302a97d4b590a25ed7879fd16";
+
+            var title = "Problemas no sistema do cliente" + nomeFantasia
+            var body = "Nome do Solicitante: " + nome + "Telefone do Solicitante: " + telefone + "Email do Solicitante: " + email + "Empresa: " + nomeFantasia + "Problema: " + corpo 
+
+            const msg = JSON.stringify ({
+                "title": title,
+                "body": body,
+                "labels": [
+                            "bug"
+                          ]
+                })
+
+            const x = new XMLHttpRequest();
+            x.open('POST', github, true);
+            x.setRequestHeader("Content-type", "application/json");
+            x.setRequestHeader("Authorization", "token " + token ); //**
+            console.log(x.send(msg))
+        }
+    </script>
+    <!-- END ERRO MODAL -->
+</body>
+{% endblock %} {% block scripts %}
+
+<!-- Bootstrap core JavaScript-->
+<script src="{{ url_for('static', filename='components/vendor/jquery/jquery.min.js') }}"></script>
+<script src="{{ url_for('static', filename='components/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+
+<!-- Core plugin JavaScript-->
+<script src="{{ url_for('static', filename='components/vendor/jquery-easing/jquery.easing.min.js') }}"></script>
+
+<!-- Custom scripts for all pages-->
+<script src="{{ url_for('static', filename='components/js/sb-admin-2.min.js') }}"></script>
+
+<!-- Page level plugins -->
+<script src="{{ url_for('static', filename='components/vendor/datatables/jquery.dataTables.min.js') }}"></script>
+<script src="{{ url_for('static', filename='components/vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
+
+{% endblock %}

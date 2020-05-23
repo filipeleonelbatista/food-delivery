@@ -1,0 +1,148 @@
+{% extends "base.html" %}
+
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
+<script src="{{ url_for('static', filename='jquery-3.3.1.js') }}"></script>
+<script src="{{ url_for('static', filename='html2canvas.min.js') }}"></script>
+<script src="{{ url_for('static', filename='jquery.dataTables.min.js') }}"></script>
+<script src="{{ url_for('static', filename='main.js') }}"></script>
+
+{% endblock %}
+
+{% block page_content %}
+
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+    <h1 class="h2">Gerador de assinaturas</h1>
+    <!-- Iniciar o form -->
+    <div class="btn-toolbar mb-2 mb-md-0">
+            <div class="btn-group">
+                    <button type="button" class="btn btn-sm btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-share-alt"></i>&nbsp;Salvar
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-right">        
+                        <a class="dropdown-item" href="#">
+                            <i class="fas fa-download"></i>&nbsp; Baixar modelo</a>
+                        <a class="dropdown-item" href="javascript:screenshot();">
+                            <i class="far fa-save"></i>&nbsp; Salvar assinatura</a>
+                    </div>
+                  </div>
+            <div class="btn-group mr-2">
+
+                
+            
+            </div>
+        </div>
+  </div>
+   <!-- Mensagens -->
+{% with messages = get_flashed_messages(with_categories=true) %}
+<!-- Categories: success (green), info (blue), warning (yellow), danger (red) -->
+{% if messages %}
+  {% for category, message in messages %}
+  <div class="alert alert-{{ category }}">
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+      {{ message }}
+  </div>
+  {% endfor %}
+{% endif %}
+{% endwith %}
+<!-- Mensagens -->
+<div class="container">
+  <small><p>As informações da assinatura estão relacionados aos dados cadastrados paras seu usuário.</p></small>
+</div>
+
+<div class="container">
+    
+    <div id="card" class="col-md-6" style="display: table; margin: 0 auto;">
+        <table border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td style="padding:5px; margin-bottom: 0px;">
+                    <img width="200" height="100" id="_x0000_i1026" src="{{ url_for('static', filename='images/'+config.logo) }}" alt="" />
+                </td>
+                <td width="300" style="padding:5px;">
+                    <p style="margin-left: 15px;margin-bottom: 5px;">
+                        <span style="font-size:12pt;font-family:'Arial','sans-serif'"><b>{{meuPerfil.nome}}</b></span><br/>
+                        <span style="font-size:8pt;font-family:'Arial','sans-serif'">{{meuPerfil.perfilUsuario.nome}}</span>
+                    </p>
+                    <table>
+                        <tr>
+                            <td style="padding:5px;">
+                                <table>
+                                    <tr>
+                                        <td align="center">
+                                            <img width="17" height="12" style="vertical-align: middle; margin: 0px 5px;" src="{{ url_for('static', filename='assinatura/icone_gmail.png') }}" alt="email"> 
+                                        </td>
+                                        <td>
+                                            <span style="font-size:8pt;font-family:'Arial','sans-serif">
+                                                <a href="mailto:{{meuPerfil.email}}" target="_blank">													
+                                                    {{meuPerfil.email}}				
+                                                </a>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="center">
+                                            <img width="9" height="15" style="vertical-align: middle; margin: 0px 5px;" src="{{ url_for('static', filename='assinatura/icone_local.png') }}" alt="localizacao">
+                                        </td>
+                                        <td>
+                                            <span style="font-size:8pt;font-family:'Arial','sans-serif'">
+                                                <a style=" text-decoration:none; color: rgb(0, 0, 0);" href="https://www.google.com.br/maps/place/Salux+Informatiza%C3%A7%C3%A3o+em+Sa%C3%BAde/@-30.0550753,-51.1991057,17z/data=!3m1!4b1!4m5!3m4!1s0x9519781391c38531:0x49949eff9b9fe953!8m2!3d-30.05508!4d-51.196917" target="_blank">
+                                                    {{meuPerfil.endereco.municipio}} - {{meuPerfil.endereco.uf}}
+                                                </a>
+                                            </span>	
+                                        </td>
+                                    </tr>
+                                </table> 
+                            </td>
+                            <td style="padding:5px;">
+                                <table>
+                                    <tr>
+                                        <td>
+                                            <img width="14" height="14" style="vertical-align: middle; margin: 0px 5px;" src="{{ url_for('static', filename='assinatura/icone_telefone.png') }}" alt="email"> 
+                                        </td>
+                                        <td>
+                                            <span style="font-size:8pt;font-family:'Arial','sans-serif'">
+                                                <a style=" text-decoration:none; color: rgb(0, 0, 0);" href="tel:{{meuPerfil.telefone}}">											
+                                                    {{meuPerfil.telefone}}				
+                                                </a>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <img width="15" height="15" style="vertical-align: middle; margin: 0px 5px;" src="{{ url_for('static', filename='assinatura/icone_whatsapp.png') }}" alt="whatsapp">
+                                        </td>
+                                        <td>
+                                            <span style="font-size:8pt;font-family:'Arial','sans-serif'">
+                                                <a style=" text-decoration:none; color: rgb(0, 0, 0);" href="https://wa.me/{{meuPerfil.celular}}">										
+                                                    {{meuPerfil.celular}}
+                                                </a>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" align="right">
+                    <img width="500" height="10" id="_x0000_i1027" src="{{ url_for('static', filename='assinatura/assinatura_email_barra.png') }}" alt="" />
+                </td>
+            </tr>
+    </table>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+    <script src="{{ url_for('static', filename='jquery-3.3.1.js') }}"></script>
+    <script src="{{ url_for('static', filename='jquery.dataTables.min.js') }}"></script>        
+    <script src="{{ url_for('static', filename='html2canvas.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='main.js') }}"></script>
+{% endblock %}

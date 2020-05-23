@@ -1,0 +1,80 @@
+{% extends "baseInstall.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}Instalação{% endblock %}
+
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='signin.css') }}">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+<link href="https://afeld.github.io/emoji-css/emoji.css" rel="stylesheet">
+
+{% endblock %}
+
+{% block content %}
+
+<div class="jumbotron">
+        <div class="container">
+            <div class="row">                 
+                <i class="em em-wink" 
+                style="
+                margin: auto;
+                width: 50%;
+                padding: 50px;
+                "></i>
+            </div>
+            <br>
+            <!-- Mensagens -->
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    <!-- Categories: success (green), info (blue), warning (yellow), danger (red) -->
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }}">
+                                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+            
+            <div class="col-sm">                
+                <h3 class="text-center">Tudo pronto!</h3>
+                <hr>
+
+                <div class="row">
+                    <p class="text-center">
+                        Sua senha é apenas os numeros do seu CPF<br>
+                        e voce poderá trocar depois se desejar no menu <b>Usuários,</b><br>
+                        na linha do seu nome em ações a opção <b>Alterar Senha</b>.
+                        <br>
+                    </p>
+                </div>
+                <hr>
+                <div class="row">
+                    <p class="text-center">
+                        <br>
+                        Agora que nos conhecemos, vamos entrar no sistema?
+                    </p>
+                </div>
+                <div class="row">
+                        <a href="{{ url_for('auth.login') }}" style="
+                        margin: auto;
+                        width: 50%;
+                        padding: 10px;
+                        "><button type="button" class="btn btn-sm btn-primary btn-block"
+                            >Entrar no sistema!</button></a>
+                </div>
+            </div>
+        </div>
+</div>
+
+  
+  {% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script src="{{ url_for('static', filename='jquery.mask.min.js') }}"></script>
+<script src="{{ url_for('static', filename='main.js') }}"></script>
+<script src="{{ url_for('static', filename='forms.js') }}"></script>
+{% endblock %}
+

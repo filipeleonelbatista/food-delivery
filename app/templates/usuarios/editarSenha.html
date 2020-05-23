@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block head %}
+{{ super() }}
+{% endblock %}
+{% block page_content %}
+<!-- Page Heading -->
+<form method="POST" action="{{ url_for('usuarios.editarSenha', id=meuPerfil.id) }}">
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Editar Senha</h1>        
+    <div class="mb-2 mr-2">        
+        {{ FuncionarioForm.salvar(class_="btn btn-sm btn-success shaddow-sm")}}
+        {{ FuncionarioForm.cancelar(class_="btn btn-sm btn-danger shaddow-sm")}}
+    </div>        
+  </div>
+
+<!-- Mensagens -->
+{% with messages = get_flashed_messages(with_categories=true) %}
+    <!-- Categories: success (green), info (blue), warning (yellow), danger (red) -->
+        {% if messages %}
+            {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                {{ message }}
+            </div>
+            {% endfor %}
+        {% endif %}
+{% endwith %}
+<!-- Mensagens -->
+<div class="card shadow mb-4">
+  <div class="card-header py-3">
+    <h6 class="m-0 font-weight-bold text-primary">Editar Senha </h6>
+  </div>
+  <div class="card-body">
+      <div class="row">
+          <div class="col-sm">
+              <div class="md-form">
+                {{ FuncionarioForm.funcionario.label }}  
+                {{ FuncionarioForm.funcionario(class_="form-control", value=meuPerfil.nome, readonly="readonly") }}
+              </div>
+          </div>
+          <div class="col-sm">            
+            <div class="md-form">
+              {{ FuncionarioForm.cpf.label }} 
+              {{ FuncionarioForm.cpf(class_="form-control", value=meuPerfil.CPF, readonly="readonly") }}
+            </div>
+          </div>
+      </div>       
+        <div class="row">
+          <div class="col-sm">
+              <div class="md-form">
+                  {{ FuncionarioForm.senha.label }}
+                  {{ FuncionarioForm.senha(class_="form-control", value=meuPerfil.password) }}
+                </div> 
+          </div>
+          <div class="col-sm">   
+              <div class="md-form">
+                  {{ FuncionarioForm.confirmarSenha.label }}
+                  {{ FuncionarioForm.confirmarSenha(class_="form-control") }}
+                </div>
+          </div>
+        </div>  
+  </div>
+</div>
+</form> 
+{% endblock %}
+{% block scripts %}
+{{ super() }}
+{% endblock %}

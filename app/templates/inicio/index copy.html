@@ -1,0 +1,512 @@
+{% extends "base.html" %}
+
+{% block head %}
+{{ super() }}
+{% endblock %}
+
+{% block page_content %}
+<!-- Page Heading -->
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Pagina Inicial</h1>
+    <a href="{{url_for('inicio.editarView')}}" class="btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Selecionar Relatórios</a>
+  </div>
+
+<!-- Mensagens -->
+{% with messages = get_flashed_messages(with_categories=true) %}
+    <!-- Categories: success (green), info (blue), warning (yellow), danger (red) -->
+        {% if messages %}
+            {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                {{ message }}
+            </div>
+            {% endfor %}
+        {% endif %}
+{% endwith %}
+<!-- Mensagens -->
+
+<div class="row">
+  <!-- Earnings (Monthly) Card Example -->
+  <div class="col-xl-3 col-md-6 mb-4">
+      <div class="card border-left-primary shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Ganhos Diarios</div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">R$ {{ ganhoDiario|replace(".",",") }}</div>
+            </div>
+            <div class="col-auto">
+              <i class="fas fa-calendar fa-2x text-gray-300"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Earnings (Monthly) Card Example -->
+    <div class="col-xl-3 col-md-6 mb-4">
+      <div class="card border-left-success shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Ganhos Mensais</div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">R$ {{ ganhoMensal|replace(".",",") }}</div>
+            </div>
+            <div class="col-auto">
+              <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Earnings (Monthly) Card Example -->
+    <div class="col-xl-3 col-md-6 mb-4">
+      <div class="card border-left-info shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Pedidos Concluidos</div>
+              <div class="row no-gutters align-items-center">
+                <div class="col-auto">
+                  <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">{{ pedidosDiaConcluidos }}/{{ pedidosDia }}</div>
+                </div>
+                <div class="col">
+                  <div class="progress progress-sm mr-2">
+                    <div class="progress-bar bg-info" role="progressbar" style="width: {{ percentualPedidos }}%" aria-valuenow="{{ percentualPedidos }}" aria-valuemin="0" aria-valuemax="100"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-auto">
+              <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pending Requests Card Example -->
+    <div class="col-xl-3 col-md-6 mb-4">
+      <div class="card border-left-warning shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Solicitações de pedidos</div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">18</div>
+            </div>
+            <div class="col-auto">
+              <i class="fas fa-comments fa-2x text-gray-300"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+{% if view.cliente == False and view.fornecedor == False and view.funcionario == False and view.pedido == False and view.orcamento == False and view.estoque == False and view.pagamentos == False and view.recebimentos == False and view.graficoPedidos == False %}
+<div class="text-center">
+    <h2>Nenhum relatório selecionado.</h2>
+    <p>Os relatórios ajudam a compreender sua empresa.</p>
+    <img src="{{ url_for('static', filename='admin/dash.png')}}" class="image-responsive" height="300"><br><br>
+
+    <a href="{{ url_for('inicio.editarView') }}"><button class="btn btn-sm btn-success">Selecione relatorios agora!</button></a>
+    <br><br><br>
+</div>
+{% endif %}
+
+{% if view.graficoPedidos %}
+<div class="row">
+  <div class="col-sm-6">
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+      <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Solicitações de pedido</h6>
+      </div>
+      <div class="card-body">
+      </div>
+    </div>
+
+  </div>
+  <div class="col-sm-6">
+      <!-- DataTales Example -->
+      <div class="card shadow mb-4">
+        <div class="card-header py-3">
+          <h6 class="m-0 font-weight-bold text-primary">Pedidos para entrega</h6>
+        </div>
+        <div class="card-body">
+        </div>
+      </div>
+  
+    </div>
+</div>
+<div class="row">
+
+    <!-- Area Chart -->
+    <div class="col-xl-12 col-lg-7">
+      <div class="card shadow mb-4">
+        <!-- Card Header - Dropdown -->
+        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+          <h6 class="m-0 font-weight-bold text-primary">Pedidos </h6>
+          <div class="dropdown no-arrow">
+            <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
+              <div class="dropdown-header">Filtrar por:</div>
+              <a class="dropdown-item" href="#">Ganhos diarios</a>
+              <a class="dropdown-item" href="#">Ganhos mensais</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="#">Todos os pedidos</a>
+            </div>
+          </div>
+        </div>
+        <!-- Card Body -->
+        <div class="card-body">
+            <div class="row">
+                <div class="col-sm">
+                    {{ form.selecionaGrafico.label }}
+                    {{ form.selecionaGrafico(class_="browser-default custom-select")}}
+                </div>
+                
+                <div class="col-sm">
+                    {{ form.responsavel.label }}
+                    {{ form.responsavel(class_="browser-default custom-select")}}
+                </div>
+          
+                <div class="col-sm">
+                    <label>Data inicial</label>
+                    <div class="md-form input-group mb-3">                        
+                      <input id="data1" type="text" class="form-control dp" placeholder="Data inicial" aria-label="Data inicial"
+                        aria-describedby="MaterialButton-addon2">
+                      <div class="input-group-append">
+                        <button class="btn btn-md btn-primary m-0 px-3 dpBtn" type="button"><i class="far fa-calendar-alt"></i></button>
+                      </div>
+                    </div>
+                </div>
+                <div class="col-sm">
+                    <label>Data Final</label>
+                    <div class="md-form input-group mb-3">
+                      <input id="data2" type="text" class="form-control dp" placeholder="Data final" aria-label="Data final"
+                        aria-describedby="MaterialButton-addon2">
+                      <div class="input-group-append">
+                        <button class="btn btn-md btn-primary m-0 px-3 dpBtn" type="button"><i class="far fa-calendar-alt"></i></button>
+                      </div>
+                    </div>
+                </div>
+                <div class="col-sm">
+                  <button onclick="
+                          relatorio(
+                              document.getElementById('selecionaGrafico').value,
+                              document.getElementById('data1').value,
+                              document.getElementById('data2').value,
+                              document.getElementById('responsavel').value
+                            );" 
+                          type="button" class="btn btn-md btn-primary" style="margin-top: 30px;"><i class="fas fa-filter"></i> Filtrar</button>
+                </div>
+            </div> 
+            <canvas class="my-4" id="myChart" width="1500" height="380"></canvas>
+        </div>
+      </div>
+    </div>
+</div>  
+{% endif %}
+
+  <div class="row">
+      {% if view.funcionario %}
+      <!-- Funcionarios -->
+      <div class="col-sm-6">
+          {% if funcionarios == [] %}
+          <div class="text-center">
+              <h2>Não há nenhum funcionario cadastrado!</h2>
+              <p>Manter um cadastro de usuarios ajuda na gestão interna na empresa.</p>
+              <img src="{{ url_for('static', filename='admin/funcionarios.png')}}" class="image-responsive" height="300"><br><br>
+          
+              <a href="{{ url_for('usuarios.cadastroFuncionario') }}"><button class="btn btn-sm btn-success">Cadastrar um usuário agora!</button></a>
+              <br><br><br>
+          </div>
+          {% else %}
+          <!-- DataTales Example -->
+          <div class="card shadow mb-4">
+            <div class="card-header py-3">
+              <h6 class="m-0 font-weight-bold text-primary"><a style="font-size: 15px" href="{{ url_for('usuarios.index') }}">Usuários <i class="fas fa-external-link-alt"></i></a></h6>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-bordered" id="example2" width="100%" cellspacing="0">
+                  <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Telefone</th>
+                        <th>Email</th>
+                        <th>Perfil</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                      {% for funcionario in funcionarios %}
+                        {% if current_user.perfilUsuario.id <= funcionario.perfilUsuario.id %}
+                          {% if funcionario.perfilUsuario.id < 6 %}
+                            <tr>
+                              <td class="align-middle">{{funcionario.nome}} </td>
+                              <td class="align-middle"><a style="color:#3366ff" href="tel:{{funcionario.telefone}}">{{funcionario.telefone}}</a></td>
+                              <td class="align-middle"><a style="color:#3366ff" href="mailto:{{funcionario.email}}">{{funcionario.email}}</a></td>
+                              <td class="align-middle"><button class="btn btn-sm btn-{{funcionario.perfilUsuario.cor}}">{{funcionario.perfilUsuario.nome}}</button></td>
+                            </tr>
+                          {% endif %}
+                        {% endif %}
+                      {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+      <!-- /.container-fluid -->
+          {% endif %}
+      </div>
+      {% endif %}
+      {% if view.funcionario %}
+      <!-- Funcionarios -->
+      <div class="col-sm-6">
+          {% if funcionarios == [] %}
+          <div class="text-center">
+              <h2>Não há nenhum Cliente cadastrado!</h2>
+              <p>Manter um cadastro de clientes ajuda na gestão interna na empresa.</p>
+              <img src="{{ url_for('static', filename='admin/funcionarios.png')}}" class="image-responsive" height="300"><br><br>
+          
+              <a href="{{ url_for('usuarios.cadastrarCliente') }}"><button class="btn btn-sm btn-success">Cadastrar um Cliente agora!</button></a>
+              <br><br><br>
+          </div>
+          {% else %}
+          <!-- DataTales Example -->
+          <div class="card shadow mb-4">
+            <div class="card-header py-3">
+              <h6 class="m-0 font-weight-bold text-primary"><a style="font-size: 15px" href="{{ url_for('usuarios.index') }}">Clientes <i class="fas fa-external-link-alt"></i></a></h6>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-bordered" id="example2" width="100%" cellspacing="0">
+                  <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Telefone</th>
+                        <th>Email</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                      {% for cliente in clientes %}
+                        {% if cliente.perfilUsuario.id == 6 %}
+                          <tr>
+                            <td class="align-middle">{{cliente.nome}} </td>
+                            <td class="align-middle"><a style="color:#3366ff" href="tel:{{cliente.telefone}}">{{cliente.telefone}}</a></td>
+                            <td class="align-middle"><a style="color:#3366ff" href="mailto:{{cliente.email}}">{{cliente.email}}</a></td>
+                          </tr>
+                        {% endif %}
+                      {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+      <!-- /.container-fluid -->
+          {% endif %}
+      </div>
+      {% endif %}
+      {% if view.pedido %}
+      <!-- Pedidos -->
+      <div class="col-sm-6">
+          {% if pedidos == [] %}
+          <div class="text-center">
+              <h2>Não há nenhum pedido cadastrado!</h2>
+              <p>Pedidos são a forma mais rapida de finalizar uma venda e registrar. Não perca tempo, crie seu primeiro pedido agora!</p>
+              <img src="{{ url_for('static', filename='admin/pedidos.png')}}" class="image-responsive" height="300"><br><br>
+          
+              <a href="{{ url_for('pedidos.cadastroPedido') }}"><button class="btn btn-sm btn-success">Criar um pedido</button></a>
+              <br><br><br>
+          </div>
+          {% else %}
+          <!-- DataTales Example -->
+      <div class="card shadow mb-4">
+          <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary"><a style="font-size: 15px" href="{{ url_for('pedidos.index') }}">Pedidos <i class="fas fa-external-link-alt"></i></a></h6>
+          </div>
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table table-bordered" id="example3" width="100%" cellspacing="0">
+                <thead>
+                  <tr>
+                      <th>#</th>  
+                      <th>Data de Modificação</th>                               
+                      <th>Cliente</th>
+                      <th>Valor</th>
+                      <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    {% for pedido in pedidos %}
+                    <tr>
+                      <td class="align-middle">{{pedido.id}}</td>
+                      <td class="align-middle">{{pedido.dtUpdate.strftime('%d/%m/%Y')}}</td>
+                      <td class="align-middle">
+                      {% for cliente in clientes%}  
+                      {% if cliente.id == pedido.id_cliente %}  
+                      {{ cliente.nome }}
+                      {% endif %}  
+                      {% endfor %}  
+                      </td>                            
+                      <td class="align-middle">{{pedido.total}} </td>                           
+                      <td class="align-middle"><button type="button" class="btn btn-sm btn-{{pedido.status.cor}}">{{pedido.status.nome}}</button> </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      <!-- /.container-fluid -->
+          {% endif %}
+      </div>
+      {% endif %}
+      {% if view.estoque %}
+      <!-- Estoque -->
+      <div class="col-sm-6">
+          {% if estoque == [] %}
+          <div class="text-center">
+              <h2>Não há nenhum produto cadastrado!</h2>
+              <p>Manter o estoque em dia ajuda a manter os clientes comprando.</p>
+              <img src="{{ url_for('static', filename='admin/produtos.png')}}" class="image-responsive" height="300"><br><br>
+          
+              <a href="{{ url_for('estoque.cadastroProduto') }}"><button class="btn btn-sm btn-success">Cadastrar um produto agora!</button></a>
+              <br><br><br>
+          </div>
+          {% else %}
+          <!-- DataTales Example -->
+      <div class="card shadow mb-4">
+          <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary"><a style="font-size: 15px" href="{{ url_for('estoque.index') }}">Estoque <i class="fas fa-external-link-alt"></i></a></h6>
+          </div>
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table table-bordered" id="example4" width="100%" cellspacing="0">
+                <thead>
+                  <tr>
+                      <th>Produto</th>
+                      <th>Descrição</th>
+                      <th>Preço</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    {% for produto in estoque %}
+                    <tr>
+                      <td class="align-middle">{{produto.nomeProduto}}</td>
+                      <td class="align-middle">{{produto.descricaoProduto}} </td>
+                      <td class="align-middle"> {{produto.precoVenda}}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      <!-- /.container-fluid -->          
+          {% endif %}
+      </div>
+      {% endif %}
+  </div>
+
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+{{ datepicker.loader(theme="flick") }} {# to load jQuery-ui #}
+{{ datepicker.picker(id=".dp", btnsId='.dpBtn', dateFormat='dd/mm/yy') }}
+<!-- flick - overcast - redmond - excite-bike -->
+<script src="{{ url_for('static', filename='moment.min.js') }}"></script>    
+<script src="{{ url_for('static', filename='datetime-moment.js') }}"></script>
+<script src="{{ url_for('static', filename='tables.js') }}"></script>
+<script src="{{ url_for('static', filename='main.js') }}"></script>
+
+
+{% if view.graficoPedidos %}
+    <!-- Graphs -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
+    <script>    
+window.onload = function(){
+        relatorio(0,0,0,0);
+      }  
+      var dadosGrafico = 
+        {
+          type: 'bar',
+          data: {
+            labels: [],
+            datasets: [{
+              label: 'Pedidos',
+              data: [],
+              lineTension: 0,
+              backgroundColor: '#007bff',
+              borderColor: '#007bff',
+              borderWidth: 4,
+              pointBackgroundColor: '#007bff'
+            }]
+          },
+          options: {
+            scales: {
+              yAxes: [{
+                ticks: {
+                  beginAtZero: false
+                }
+              }]
+            },
+            legend: {
+              display: false,
+            }
+          }
+        }
+      
+             
+
+      function relatorio(status, data1, data2, responsavel){
+        if (data1 == ''){
+          data1 = '0';
+        }
+        if (data2 == ''){
+          data2 = '0';
+        }
+        // limpar dadosGrafico
+        dadosGrafico.data.labels = [];
+        dadosGrafico.data.datasets[0].data = [];
+
+        fetch('/relatorios/pedidos/s='+status+";d1="+data1.replace(/\//g,"-")+";d2="+data2.replace(/\//g,"-")+";r="+responsavel+";").then(function(response){
+            response.json().then(function(data){
+              var cont = 0;
+              var achou = 0;
+
+                for(var i=0; i<data.pedidos.length; i++){
+                  for(var j=0; j<data.pedidos.length; j++){
+                    if(data.pedidos[i].dataUpdateReal == data.pedidos[j].dataUpdateReal){
+                      for(var k=0; k<dadosGrafico.data.labels.length; k++){
+                        if(data.pedidos[j].dataUpdateReal == dadosGrafico.data.labels[k]){
+                          achou++;
+                        }
+                      }
+                      if(achou == 0){
+                        cont++;
+                      }
+                    }
+                  }
+                  if ((cont != 0) && (achou == 0)){
+                    dadosGrafico.data.labels.push(data.pedidos[i].dataUpdateReal);
+                    dadosGrafico.data.datasets[0].data.push(cont);
+                    cont = 0;
+                  }
+                }         
+              let grafico = document.getElementById('myChart');
+              var myChart = new Chart(grafico, dadosGrafico);
+                    
+                  
+            });
+        });
+      }
+
+    </script>
+    {% endif %}
+{% endblock %}

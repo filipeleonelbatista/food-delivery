@@ -1,0 +1,114 @@
+{% extends "loja_base.html" %}
+
+{% block title %}Inicio{% endblock %}
+
+{% block head %}
+{{ super() }}
+{% endblock %}
+
+{% block page_content %}
+{% if banner == [] %}
+{% else %}
+<div class="simple-slider">
+    <div class="swiper-container">
+        <div class="swiper-wrapper">
+            {% for ban in banner %}
+            <div class="swiper-slide" style="background-image:url({{ url_for('static', filename='images/banners/'+ban.nome ) }});"></div>
+            {% endfor %}
+        </div>
+        <div class="swiper-pagination"></div>
+        <div id="swiper-button-next" class="swiper-button-next"></div>
+        <div id="swiper-button-prev" class="swiper-button-prev"></div>
+    </div>
+</div>
+{% endif %}
+
+<div data-aos="fade-up" data-aos-duration="1050" data-aos-delay="100" data-aos-once="true" class="features-boxed">
+    <div class="container">
+        <div class="intro"></div>
+        <div class="container">
+            <div class="row">
+                <h2 class="text-center">Produtos</h2>
+            </div>
+            <div class="row">
+                    {% for produto in produtos %}
+                    <div class="col-sm-3">
+                        <article class="col-item">
+                            <div class="photo">
+                                <a href="#"> <img src="{{ url_for('static', filename='images/products/'+produto.imagem) }}" class="img-responsive" /> </a>
+                            </div>
+                            <div class="col-sm" id="msgSCSuccess{{ produto.id }}"></div>
+                            <div class="info">
+                                <div class="row">
+                                    <div class="price-details col-md-12">
+                                        <p class="details">
+                                            {{ produto.descricaoProduto }}
+                                            <br>
+                                            Cat. {{ produto.categoria.categoria }}
+                                        </p>
+                                        <h1>{{ produto.nomeProduto }}</h1>
+                                        <span class="price-new">R$ {{ produto.precoVenda }}</span>
+                                    </div>
+                                </div>
+                                <div class="separator clear-left">
+                                    <p class="btn-add">
+                                            <a href="javascript:AddCarrinho('{{ produto.nomeProduto }}','1','{{ produto.precoVenda|replace(",",".") }}','{{ produto.id }}','{{ idMax }}','{{ produto.imagem }}');" class="hidden-sm"><i class="fa fa-shopping-cart"></i><small>Add Carrinho</small></a>                                       
+                                    </p>
+                                    <p class="btn-details">
+                                        <a href="#" class="hidden-sm" data-toggle="tooltip" data-placement="top" title="Adicionar a lista de desejos"><i class="fa fa-heart"></i></a>
+                                        <!-- <a href="#" class="hidden-sm" data-toggle="tooltip" data-placement="top" title="Compare"><i class="fa fa-exchange"></i></a> -->
+                                    </p>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+                        </article>
+                    </div>
+                    
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script src="{{ url_for('static', filename ='carrinho.js') }}"></script>
+
+<script>
+window.setTimeout(function() {
+    $(".alert").fadeTo(500, 0).slideUp(500, function(){
+        $(this).remove(); 
+    });
+}, 4000);
+
+var recursiva = function () {    
+    document.getElementById("swiper-button-next").click();
+    setTimeout(recursiva,4500);
+}
+recursiva();
+
+    var swiper = new Swiper('.swiper-container', {
+        autoHeight: true,
+    //   spaceBetween: 30,
+    //   centeredSlides: true,
+    //   autoplay: {
+    //     delay: 2500,
+    //     disableOnInteraction: false,
+    //   },
+    //   pagination: {
+    //     el: '.swiper-pagination',
+    //     clickable: true,
+    //   },
+    //   navigation: {
+    //     nextEl: '.swiper-button-next',
+    //     prevEl: '.swiper-button-prev',
+    //   },
+    });
+
+</script>
+{% endblock %}

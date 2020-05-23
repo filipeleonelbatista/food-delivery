@@ -1,0 +1,334 @@
+{% extends "base.html" %} {% block head %} {{ super() }}
+<style>
+    .cursor {
+        cursor: pointer !important;
+    }
+    
+    .cursor:hover {
+        cursor: pointer !important;
+    }
+</style>
+{% endblock %} {% block page_content %}
+<!-- Page Heading -->
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Ponto de Venda</h1>
+    <div class="mb-2 mr-2">
+        <button type="button" class="btn btn-sm btn-success" onclick="enviar();">Criar pedido</button>
+        <button type="button" onclick="limparFormulario()" class="btn btn-sm btn-warning">Limpar formulario</button>
+        <button class="btn btn-sm btn-danger" onclick="cancelar()">Cancelar</button>
+    </div>
+</div>
+
+<!-- Mensagens -->
+{% with messages = get_flashed_messages(with_categories=true) %}
+<!-- Categories: success (green), info (blue), warning (yellow), danger (red) -->
+{% if messages %} {% for category, message in messages %}
+<div class="alert alert-{{ category }}">
+    <button type="button" class="close" data-dismiss="alert">&times;</button> {{ message }}
+</div>
+{% endfor %} {% endif %} {% endwith %}
+<!-- Mensagens -->
+
+
+<div id="mensagemJs"> </div>
+
+{% if produtos == [] %}
+<div class="text-center">
+    <h2>Não há nenhum produto cadastrado!</h2>
+    <p>Sem os produtos, o ponto de venda nao funciona corretamente. Cadastre produtos para que possam ser adicionados ao pedido.
+    </p>
+    <img src="{{ url_for('static', filename='admin/produtos.png')}}" class="image-responsive" height="300"><br><br>
+
+    <a href="{{ url_for('estoque.cadastroProduto') }}"><button class="btn btn-sm btn-success">Cadastrar um produto
+			agora!</button></a>
+    <br><br><br>
+</div>
+{% else %}
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Ponto de Venda </h6>
+    </div>
+    <div class="card-body">
+        <div id="show"></div>
+        <div class="row">
+            <div class="col-sm-8">
+                <div class="row">
+                    <div class="col-sm">
+                        <h3> Produtos </h3>
+                    </div>
+                    <div class="col-sm float-left">
+                        <form class="form-inline md-form form-sm active-cyan-2 mt-2">
+                            <input class="form-control form-control-sm mr-3 w-75" onkeyup="pesquisar(this.value);" type="text" placeholder="Pesquisar itens" aria-label="Search">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </form>
+                    </div>
+                </div>
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                    {% for categoria in categorias %} {% if loop.index == 1 %}
+                    <li class="nav-item">
+                        <a class="nav-link active" id="categoria-{{ categoria.id }}-tab" data-toggle="tab" href="#categoria-{{ categoria.id }}-conteudo" role="tab" aria-controls="categoria-{{ categoria.id }}-conteudo" aria-selected="true">{{ categoria.categoria }}</a>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" id="categoria-{{ categoria.id }}-tab" data-toggle="tab" href="#categoria-{{ categoria.id }}-conteudo" role="tab" aria-controls="categoria-{{ categoria.id }}-conteudo" aria-selected="false">{{ categoria.categoria }}</a>
+                    </li>
+                    {% endif %} {% endfor %}
+
+                    <li class="nav-item">
+                        <a class="nav-link" id="formasPagamento-tab" data-toggle="tab" href="#formasPagamento" role="tab" aria-controls="formasPagamento" aria-selected="false">Pagamento</a>
+                    </li>
+                </ul>
+                <div class="tab-content" id="myTabContent">
+                    {% for categoria in categorias %} {% if loop.index == 1%}
+                    <div class="tab-pane fade show active" id="categoria-{{ categoria.id }}-conteudo" role="tabpanel" aria-labelledby="categoria-{{ categoria.id }}-tab">
+                        <div class="row">
+                            {%for produto in produtos%} {%if produto.id_categoria == categoria.id %}
+
+                            <div id="{{ produto.nomeProduto|lower|replace(' ','') }}" class="col-sm-3" style="margin-top:10px;" onclick="inserirProduto('{{ produto.nomeProduto }}','{{ produto.precoVenda }}','{{ produto.id }}');">
+                                <div class="card cursor">
+                                    <div class="view overlay">
+                                        <img class="card-img-top" src="{{ url_for('static', filename='images/products/'+produto.imagem) }}" alt="Card image cap">
+                                        <a href="javascript:inserirProduto('{{ produto.nomeProduto }}','{{ produto.precoVenda }}','{{ produto.id }}');">
+                                            <div class="mask rgba-white-slight"></div>
+                                        </a>
+                                    </div>
+                                    <div class="card-body">
+                                        <strong class="card-title">{{ produto.nomeProduto }}</strong>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endif %} {% endfor %}
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="tab-pane" id="categoria-{{ categoria.id }}-conteudo" role="tabpanel" aria-labelledby="categoria-{{ categoria.id }}-tab">
+                        <div class="row">
+                            {%for produto in produtos%} {%if produto.id_categoria == categoria.id %}
+                            <div id="{{ produto.nomeProduto|lower|replace(' ','') }}" class="col-sm-3" style="margin-top:10px;" onclick="inserirProduto('{{ produto.nomeProduto }}','{{ produto.precoVenda }}','{{ produto.id }}');">
+                                <div class="card cursor">
+                                    <div class="view overlay">
+                                        <img class="card-img-top" src="{{ url_for('static', filename='images/products/'+produto.imagem) }}" alt="Card image cap">
+                                        <a href="javascript:inserirProduto('{{ produto.nomeProduto }}','{{ produto.precoVenda }}','{{ produto.id }}')">
+                                            <div class="mask rgba-white-slight"></div>
+                                        </a>
+                                    </div>
+                                    <div class="card-body">
+                                        <strong class="card-title">{{ produto.nomeProduto }}</strong>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endif %} {% endfor %}
+                        </div>
+
+                    </div>
+                    {% endif %} {% endfor %}
+
+                    <div class="tab-pane fade" id="formasPagamento" role="tabpanel" aria-labelledby="formasPagamento-tab">
+                        <div class="row">
+                            <div class="col-sm-3" style="margin-top:10px;" onclick="inserirPagamento(1)">
+                                <div class="card">
+                                    <div class="view overlay">
+                                        <img class="card-img-top" src="{{ url_for('static', filename='images/cartao.png') }}" alt="Card image cap">
+                                        <a onclick="inserirPagamento(1)">
+                                            <div class="mask rgba-white-slight"></div>
+                                        </a>
+                                    </div>
+                                    <div class="card-body">
+                                        <strong class="card-title">Cartão de Crédito</strong>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-3" style="margin-top:10px;" onclick="inserirPagamento(2)">
+                                <div class="card">
+                                    <div class="view overlay">
+                                        <img class="card-img-top" src="{{ url_for('static', filename='images/cartao.png') }}" alt="Card image cap">
+                                        <a onclick="inserirPagamento(2)">
+                                            <div class="mask rgba-white-slight"></div>
+                                        </a>
+                                    </div>
+                                    <div class="card-body">
+                                        <strong class="card-title">Cartão de Débito</strong>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-3" style="margin-top:10px;" onclick="inserirPagamento(3)">
+                                <div class="card">
+                                    <div class="view overlay">
+                                        <img class="card-img-top" src="{{ url_for('static', filename='images/dinheiro.png') }}" alt="Card image cap">
+                                        <a onclick="inserirPagamento(3)">
+                                            <div class="mask rgba-white-slight"></div>
+                                        </a>
+                                    </div>
+                                    <div class="card-body">
+                                        <strong class="card-title">À Vista</strong>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-3" style="margin-top:10px;">
+                                <div id="troco" style="display:none;" class="md-form">
+                                    <input id="valorentregue" inputmode="numeric" type="text" onkeyup="insereTroco(this.value)" class="form-control">
+                                    <label for="valorentregue">Valor entregue </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="resultSearchTabs" class="tab-content" style="display:none;">
+                    <div class='tab-pane fade show active' role='tabpanel'>
+                        <h3>Resultados da pesquisa:</h3>
+                        <div class='container'>
+                            <div id='apresenta' class='row'>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <!-- Material input -->
+                <!--Material textarea-->
+                <div class="md-form">
+                    <textarea id="form7" onkeyup="observacao(this.value)" class="md-textarea form-control" rows="3"></textarea>
+                    <label for="form7">Observação</label>
+                </div>
+            </div>
+
+            <div style="background-color:#ffff9e;" id="nota" class="col-sm-4">
+                <br>
+                <p id="cabecalho" class="text-center" style="display:none; font-family: 'Lucida Console';font-size: 12px;">
+                    <strong>{{ config.nomeFantasia }}</strong><br> ------------------------------------------
+                    <br> {{ config.endereco.endereco }}, {{ config.endereco.numero }}<br> {{ config.endereco.bairro }}, {{ config.endereco.municipio }}<br> {{ config.whatsapp }}<br> ------------------------------------------
+                </p>
+                <button type="button" class="btn btn-sm btn-dark" data-toggle="modal" data-target="#pesquisarCliente">
+					<i class="fas fa-search"></i> Selecionar Cliente
+				</button>
+                <!-- Modal -->
+                <div class="modal fade" id="pesquisarCliente" tabindex="-1" role="dialog" aria-labelledby="pesquisarClienteLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="pesquisarClienteLabel">Pesquisar Clientes</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+                            </div>
+                            <div class="modal-body">
+                                {% if clientes == [] %}
+                                <div class="text-center">
+                                    <h2>Não há nenhum cliente cadastrado!</h2>
+                                    <p>Cadastrar seu clientes ajuda a manter relações e gerar novas vendas.</p>
+                                    <img src="{{ url_for('static', filename='admin/clientes.png')}}" class="image-responsive" height="300"><br><br>
+
+                                    <a href="{{ url_for('usuarios.cadastrarCliente') }}"><button type="button"
+											class="btn btn-sm btn-success">Cadastrar um cliente agora!</button></a>
+                                    <br><br><br>
+                                </div>
+                                {% else %}
+
+                                <div class="table-responsive">
+                                    <table id="example1" class="display table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>Cliente</th>
+                                                <th>CPF</th>
+                                                <th>Telefone</th>
+                                                <th>Celular</th>
+                                                <th>Ações</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for cliente in clientes %}
+                                            <tr>
+                                                <td>{{ cliente.nome }}</td>
+                                                <td>{{ cliente.CPF }}</td>
+                                                <td>{{ cliente.telefone }}</td>
+                                                <td>{{ cliente.celular }}</td>
+                                                <td>
+                                                    <button type="button" class="btn btn-sm btn-success" data-dismiss="modal" aria-label="Close" onclick="selecionarCliente(
+																									'{{ cliente.id }}',
+																									'{{ cliente.nome }}',
+																									'{{ cliente.telefone }}/{{ cliente.celular }}',
+																									'{{ cliente.endereco.endereco }}, {{ cliente.endereco.numero }} Bairro {{ cliente.endereco.bairro }} {{ cliente.endereco.municipio }}-{{ cliente.endereco.uf }} {{ cliente.endereco.pais }}',
+																									'{{ cliente.frete }}'
+																									);">Selecionar</button>
+                                                </td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                                {% endif %}
+                            </div>
+                            <div class="modal-footer">
+                                <a href="{{ url_for('usuarios.cadastrarCliente') }}"> <button type="button" class="btn btn-sm btn-success">Cadastrar cliente</button></a>
+                                <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal">Cancelar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Fim do modal -->
+
+                <p style=" font-family: 'Lucida Console';font-size: 12px;">
+                    <strong>Dados do cliente</strong>
+                    <span id="idCliente" style="display:none;">vazio</span>
+                    <br>Nome: <span id="nomeCliente"></span>
+                    <br>Telefone:<span id="telefoneCliente"></span>
+                    <br>Endereço: <span id="enderecoCliente"></span>
+                </p>
+                <p style=" font-family: 'Lucida Console';font-size: 12px;">
+                    <strong>Itens Pedido</strong>
+                    <table id="tabelaNota" class="table table-sm borderless">
+                        <thead>
+                            <tr>
+                                <th>Cod</th>
+                                <th>Qtd</th>
+                                <th>Item</th>
+                                <th>Preço</th>
+                                <th>Remover</th>
+                            </tr>
+                        </thead>
+                        <tbody id="item">
+                        </tbody>
+                    </table>
+                </p>
+                <p style=" font-family: 'Lucida Console';font-size: 12px;">
+                    ------------------------------------------
+                    <br>Subtotal:<span class="text-right" id="subtotal"></span>
+                    <br>Taxa de entrega:<span class="text-right" id="frete">R$ 00,00</span>
+                    <br>Metodo de pagamento:<span class="text-right" id="pagamento"></span>
+                    <br><span id=diff style="display:none;">Troco: R$ </span>
+                    <br>Total:<span class="text-right" id="Total">R$ 00,00</span>
+                    <br>
+                    <br>Observação:
+                    <br><span id="observacao"></span>
+                    <br>
+                </p>
+                <p id="footer" clas="text-center" style="display:none; font-family: 'Lucida Console';font-size: 12px;">
+                    ------------------------------------------<br> Obrigado por comprar com a gente!<br> ------------------------------------------
+                    <br>
+                </p>
+
+            </div>
+
+
+        </div>
+    </div>
+</div>
+{% endif %} {% endblock %} {% block scripts %} {{ super() }}
+<script src="{{ url_for('static', filename='moment.min.js') }}"></script>
+<script src="{{ url_for('static', filename='jquery.dataTables.min.js') }}"></script>
+<script src="{{ url_for('static', filename='datetime-moment.js') }}"></script>
+<script src="{{ url_for('static', filename='tables.js') }}"></script>
+<script src="{{ url_for('static', filename='main.js') }}"></script>
+<script src="{{ url_for('static', filename='jquery.mask.min.js') }}"></script>
+<script src="{{ url_for('static', filename='forms.js') }}"></script>
+<script src="{{ url_for('static', filename='pdv.js') }}"></script>
+<style>
+    .borderless tr,
+    .borderless td,
+    .borderless th {
+        border: none !important;
+        font-family: 'Lucida Console';
+        font-size: 12px;
+        vertical-align: middle;
+    }
+</style>
+{% endblock %}

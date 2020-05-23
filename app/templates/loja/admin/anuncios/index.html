@@ -1,0 +1,161 @@
+{% extends "base.html" %}
+
+{% block head %}
+{{ super() }}
+
+{% endblock %}
+
+{% block page_content %}
+
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+    <h1 class="h2">Anuncios</h1>
+     <div class="btn-toolbar mb-2 mb-md-0">
+      <div class="btn-group mr-2">
+        <a href="{{ url_for('loja.lojaVirtual') }}"><button class="btn btn-sm btn-danger">Voltar para Loja</button></a>
+        <!-- <a href="#"><button class="btn btn-sm btn-outline-primary">Selecionar Relatórios</button></a> -->
+      </div>
+    </div>
+  </div>
+<!-- Mensagens -->
+{% with messages = get_flashed_messages(with_categories=true) %}
+    <!-- Categories: success (green), info (blue), warning (yellow), danger (red) -->
+        {% if messages %}
+            {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                {{ message }}
+            </div>
+            {% endfor %}
+        {% endif %}
+{% endwith %}
+<!-- Mensagens -->
+<div id="msgJs"></div>
+
+{% if anuncios == [] %}
+<div class="container">
+        <div class="row">
+            Não há anuncios cadastrados.<br><a href="#"><button class="btn btn-sm btn-success">Adicionar anuncios</button></a>
+        </div>
+</div>
+{% else %}
+<div class="container">
+        <div class="row">
+            <a href="{{ url_for('loja.adicionarAnuncio') }}"><button class="btn btn-sm btn-success">Adicionar anuncios</button></a>
+        </div>
+        <div class="row">
+            <div class="table table-hover table-responsive">
+                <table id="example" class="display">
+                    <thead>
+                        <tr>
+                            <th class="text-center" style="vertical-align: middle;">Titulo</th>
+                            <th class="text-center" style="vertical-align: middle;">Imagem</th>
+                            <th class="text-center" style="vertical-align: middle;">Valor</th>
+                            <th class="text-center" style="vertical-align: middle;">Categoria</th>
+                            <th class="text-center" style="vertical-align: middle;">Destaque</th>
+                            <th class="text-center" style="vertical-align: middle;">Ação</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for anuncio in anuncios %}                        
+                        <tr>
+                            <td class="text-center" style="vertical-align: middle;">{{ anuncio.titulo }}</td>
+                            <td class="text-center" style="vertical-align: middle;"><img src="{{ url_for('static', filename='images/anuncios/'+anuncio.imagem ) }}" height="50"></td>
+                            <td class="text-center" style="vertical-align: middle;">R$ {{ anuncio.precoVenda }}</td>
+                            <td class="text-center" style="vertical-align: middle;">{{ anuncio.categoria.categoria }}</td>
+                            <td class="text-center" style="vertical-align: middle;">
+                                {% if anuncio.destaque %}
+                                <button type="button" class="btn btn-sm btn-success">Sim</button>
+                                {% else %}
+                                <button type="button" class="btn btn-sm btn-danger">Não</button>
+                                {% endif %}
+                                
+                            </td>
+                            <td class="text-center" style="vertical-align: middle;">
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-sm btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Ações
+                                    </button>
+                                    <div class="dropdown-menu">  
+                                        <a class="dropdown-item" href="{{ url_for('loja.editarAnuncio', id=anuncio.id) }}">
+                                            <span class="fas fa-pencil-alt" style="color:green" aria-hidden="true"></span>
+                                            </span>&nbspEditar
+                                        </a>
+                                                                        
+                                        <a class="dropdown-item" href="javascript:visualizar( {{ anuncio.id }} );">
+                                                <span class="fas fa-search" style="color:black" aria-hidden="true">
+                                                </span>&nbspVisualizar
+                                            </a>                                
+                                        <a class="dropdown-item" href="javascript:excluir( {{ anuncio.id }} );">
+                                            <span class="fas fa-trash" style="color:red" aria-hidden="true">
+                                            </span>&nbspExcluir
+                                        </a>                         
+                                    </div>                                       
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+    
+            </div>
+        </div>
+    </div>
+<div id="modalJs"></div>
+{% endif %}
+
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script>
+    function excluir(id){
+        if(confirm("deseja escluir este anuncio?")){
+            //
+            fetch('/anuncios/excluir/'+id).then(function(response){
+                response.json().then(function(data){
+                    document.getElementById('msgJs').innerHTML = "<div class='alert alert-"+data.cor+"'><button type='button' class='close' data-dismiss='alert'>&times;</button>"+data.mensagem+"</div>";
+                    var n = 5;
+                    window.setInterval(function(){
+                    if(n==0){
+                        window.location.href = data.url;
+                    }
+                    n--;
+                    },1000);
+                });
+            });
+          
+            //
+        }
+    }
+
+    function visualizar(id){
+
+            //
+            fetch('/anuncios/visualizar/'+id).then(function(response){
+                response.json().then(function(data){
+                    if(data.destaque == true){                                
+                        data.destaque = "<button type='button' class='btn btn-sm btn-success'>Sim</button>";
+                    }else{
+                        data.destaque = "<button type='button' class='btn btn-sm btn-danger'>Não</button>";
+                    }
+                    if(data.link != null){
+                        link = "<b>Link externo:</b> <a href='"+data.link+"' target='_blank'>"+data.link+"</a>";
+                    }else{
+                        link = ' ';
+                    }
+                    modal = "<button id='modal' style='display:none;' type='button' class='btn btn-primary' data-toggle='modal' data-target='#modalView'>Launch modal</button> <br> <div id='modalView' class='modal fade bd-example-modal-lg' tabindex='-1' role='dialog' aria-labelledby='modalView' aria-hidden='true'> <div class='modal-dialog modal-lg'> <div class='modal-content'> <div class='modal-header'> <h5 class='modal-title'><strong>"+data.titulo+"</strong></h5> <button type='button' class='close' data-dismiss='modal' aria-label='Close'> <span aria-hidden='true'>&times;</span> </button> </div> <div class='modal-body'> <div class='row'> <div class='col-sm-4'> <img src='static/images/anuncios/"+data.img+"' class='img-thumbnail' width='250px'></div> <div class='col-sm-8'> <p> <b>Categoria:</b> "+data.cat+"<br> <b>Descrição:</b> <br>"+data.descricao+"<br> <b>Valor:</b>R$ "+data.valor+"<br> <b>Destaque:</b> "+data.destaque+"<br>"+link+"<br> </p></div></div> </div> <div class='modal-footer'> <button type='button' class='btn btn-sm btn-danger' data-dismiss='modal'>Fechar</button> </div> </div> </div></div>";
+                    document.getElementById('modalJs').innerHTML = modal;
+                    document.getElementById('modal').click();
+                });
+            });
+          
+            //
+        }
+    
+    </script>
+<script src="{{ url_for('static', filename='moment.min.js') }}"></script>    
+<script src="{{ url_for('static', filename='jquery.dataTables.min.js') }}"></script>
+<script src="{{ url_for('static', filename='datetime-moment.js') }}"></script>
+<script src="{{ url_for('static', filename='tables.js') }}"></script>
+<script src="{{ url_for('static', filename='main.js') }}"></script>
+{% endblock %}

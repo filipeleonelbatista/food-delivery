@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+
+{% block head %}
+{{ super() }}
+
+{% endblock %}
+
+{% block page_content %}
+
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+    <h1 class="h2">Banners</h1>
+     <div class="btn-toolbar mb-2 mb-md-0">
+      <div class="btn-group mr-2">
+        <a href="{{ url_for('loja.lojaVirtual') }}"><button class="btn btn-sm btn-danger">Voltar para Loja</button></a>
+        <!-- <a href="#"><button class="btn btn-sm btn-outline-primary">Selecionar Relatórios</button></a> -->
+      </div>
+    </div>
+  </div>
+<!-- Mensagens -->
+{% with messages = get_flashed_messages(with_categories=true) %}
+    <!-- Categories: success (green), info (blue), warning (yellow), danger (red) -->
+        {% if messages %}
+            {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                {{ message }}
+            </div>
+            {% endfor %}
+        {% endif %}
+{% endwith %}
+<!-- Mensagens -->
+<div id="msgJs"></div>
+
+
+{% if banner == [] %}
+<div class="container">
+        <div class="row">
+            Não há banners cadastrados.<br><a href="#"><button class="btn btn-sm btn-success">Adicionar Banner</button></a>
+        </div>
+</div>
+{% else %}
+<div class="container">
+        <div class="row">
+            <a href="{{ url_for('loja.adicionarBanner') }}"><button class="btn btn-sm btn-success">Adicionar Banner</button></a>
+        </div>
+        <div class="row">
+            <div class="table table-hover table-responsive">
+                <table id="example" class="display">
+                    <thead>
+                        <tr>
+                            <th class="text-center" style="vertical-align: middle;">Ordem</th>
+                            <th class="text-center" style="vertical-align: middle;">Imagem</th>
+                            <th class="text-center" style="vertical-align: middle;">Ação</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for ban in banner %}                        
+                        <tr>
+                            <td class="text-center" style="vertical-align: middle;">{{ ban.ordem }}</td>
+                            <td class="text-center" style="vertical-align: middle;"><img src="{{ url_for('static', filename='images/banners/'+ban.nome ) }}" height="100"></td>
+                            <td class="text-center" style="vertical-align: middle;">
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-sm btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Ações
+                                    </button>
+                                    <div class="dropdown-menu">  
+                                        <a class="dropdown-item" href="{{ url_for('loja.editarBanner', id=ban.id) }}">
+                                            <span class="fas fa-pencil-alt" style="color:green" aria-hidden="true"></span>
+                                            </span>&nbspEditar
+                                        </a>                                
+                                        <a class="dropdown-item" href="javascript:excluirBanner( {{ ban.id }} );">
+                                            <span class="fas fa-trash" style="color:red" aria-hidden="true">
+                                            </span>&nbspExcluir
+                                        </a>                         
+                                    </div>                                       
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+    
+            </div>
+        </div>
+    </div>
+{% endif %}
+
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script>
+function excluirBanner(id){
+    if(confirm("deseja escluir o banner?")){
+        //
+        fetch('/banner/excluirBanner/'+id).then(function(response){
+            response.json().then(function(data){
+                document.getElementById('msgJs').innerHTML = "<div class='alert alert-"+data.cor+"'><button type='button' class='close' data-dismiss='alert'>&times;</button>"+data.mensagem+"</div>";
+                var n = 5;
+                window.setInterval(function(){
+                if(n==0){
+                    window.location.href = data.url;
+                }
+                n--;
+                },1000);
+            });
+        });
+      
+        //
+    }
+}
+</script>
+<script src="{{ url_for('static', filename='moment.min.js') }}"></script>    
+<script src="{{ url_for('static', filename='jquery.dataTables.min.js') }}"></script>
+<script src="{{ url_for('static', filename='datetime-moment.js') }}"></script>
+<script src="{{ url_for('static', filename='tables.js') }}"></script>
+<script src="{{ url_for('static', filename='main.js') }}"></script>
+{% endblock %}

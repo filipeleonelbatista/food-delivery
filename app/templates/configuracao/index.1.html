@@ -1,0 +1,216 @@
+{% extends "base.html" %}
+
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block head %}
+{{ super() }}
+
+{% endblock %}
+
+{% block page_content %}
+<!-- Page Heading -->
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Configurações</h1>        
+        <div class="mb-2 mr-2">
+            <a href="{{ url_for('configuracao.empresa') }}"><button class="btn btn-sm btn-success">Editar Informações</button></a>
+        </div>        
+      </div>
+    
+    <!-- Mensagens -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        <!-- Categories: success (green), info (blue), warning (yellow), danger (red) -->
+            {% if messages %}
+                {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    {{ message }}
+                </div>
+                {% endfor %}
+            {% endif %}
+    {% endwith %}
+    <!-- Mensagens -->
+
+    <div class="card shadow mb-4">
+            <div class="card-header py-3">
+              <h6 class="m-0 font-weight-bold text-primary">Usuários </h6>
+            </div>
+            <div class="card-body">
+
+                    <h4>Informações comerciais</h4>
+                    <div class="row">
+                            <div class="col-sm">
+                                <strong> Razão Social:</strong>
+                                {{ config.razaoSocial }}
+                            </div>
+                            <div class="col-sm">
+                                <strong> Nome fantasia:</strong>
+                                {{ config.nomeFantasia }}
+                            </div>
+                            <div class="col-sm">
+                                <strong> CNPJ:</strong>
+                                {{ config.CNPJ }}
+                            </div>
+                    </div>
+                    <hr>
+                    <h4>Contato da empresa</h4>
+                    <div class="row">
+                        <div class="col-sm">
+                            <strong>Whatsapp:</strong>
+                            {{ config.whatsapp }}
+                        </div>
+                        <div class="col-sm">
+                            <strong>Facebook:</strong>
+                            {{ config.facebook }}
+                        </div>
+                        <div class="col-sm">
+                            <strong>Twitter:</strong>
+                            {{ config.twitter }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm">
+                            <strong>Instagram:</strong>
+                            {{ config.instagram }}
+                        </div>
+                        <div class="col-sm">
+                            <strong>Youtube:</strong>
+                            {{ config.youtube }}
+                        </div>
+                        <div class="col-sm">
+                            <strong>Linkedin:</strong>
+                            {{ config.linkedin }}
+                        </div>               
+                    </div>
+                    <div class="row">                
+                        <div class="col-sm">
+                            <strong>Telefone:</strong>
+                            {{ config.telefone }}
+                        </div> 
+                        <div class="col-sm">
+                            <strong>Email:</strong>
+                            {{ config.email }}
+                        </div>
+                    </div>
+                    <hr>
+                    <h4>Sobre a empresa</h4>
+                    <div class="row">
+                        <div class="col-sm">
+                            <strong>Descrição curta:</strong>
+                            {{ config.descricao }}
+                        </div>
+                        <div class="col-sm">
+                            <strong>Sobre a empresa:</strong>
+                            {{ config.sobre|truncate(150)}}
+                        </div>     
+                    </div>
+                    <hr>
+                    <h4>Logo e imagem</h4>
+                    <div class="col-sm">
+                        <div class="row">
+                            <strong> Icone</strong>
+                            <div class="col-sm-2">                    
+                                <img src="{{ url_for('static', filename='images/'+config.icon) }}" class="img-thumbnail" width="50">
+                            </div>                
+                            <strong> Logo</strong>
+                            <div class="col-sm-2">
+                                <img src="{{ url_for('static', filename='images/'+config.logo) }}" class="img-thumbnail">
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    {% set enderurl = "" + config.endereco.endereco + ", " + config.endereco.numero|string + " Bairro " + config.endereco.bairro + " " + config.endereco.municipio + "-" + config.endereco.uf + " " + config.endereco.pais %}
+                    <h4>Localização<a style="font-size: 15px" href="https://www.google.com/maps/search/?api=1&query={{ enderurl|replace(' ','+')|replace(',','%2C') }}"><i class="fas fa-external-link-alt"></i></a></h4>
+                    <div class="row">
+                        <div class="col-sm">
+                            <strong>Endereço: </strong>
+                            {{ config.endereco.endereco }}
+                        </div>
+                        <div class="col-sm">
+                            <strong>Numero: </strong>
+                            {{ config.endereco.numero }}
+                        </div>
+                        <div class="col-sm">
+                            <strong>CEP: </strong>
+                            {{ config.endereco.cep }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm">
+                            <strong>Bairro: </strong>
+                            {{ config.endereco.bairro }}
+                        </div>
+                        <div class="col-sm">
+                            <strong>Municipio: </strong>
+                            {{ config.endereco.municipio }}
+                        </div>
+                        <div class="col-sm">
+                            <strong>UF: </strong>
+                            {{ config.endereco.uf }}
+                        </div>
+                        <div class="col-sm">
+                            <strong>Pais: </strong>
+                            {{ config.endereco.pais }}
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-sm">
+                            <strong>Impressão após a criação do pedido?
+                                {% if config.imprimir %}
+                                    <i class="fas fa-check" style="color:green;"></i> 
+                                {% else %} 
+                                    <i class="fas fa-times" style="color:red;"></i>
+                                {% endif %}
+                            </strong>
+                        </div>
+                        
+                        <div class="col-sm">
+                            <strong>Tipo de impressão:
+                                {% if config.tipoImpressao %}
+                                    Térmica 
+                                {% else %} 
+                                    Padrão de pedido
+                                {% endif %}
+                            </strong>
+                        </div>
+                        {% if current_user.id == 1 %}
+                        <div class="col-sm">
+                                <strong>Sistema ativado?
+                                    {% if config.imprimir %}
+                                        <i class="fas fa-check" style="color:green;"></i> 
+                                    {% else %} 
+                                        <i class="fas fa-times" style="color:red;"></i>
+                                    {% endif %}
+                                </strong>
+                            </div>
+                        <div class="col-sm">
+                            <strong>Possui atualização?
+                                {% if config.update %}
+                                    <i class="fas fa-check" style="color:green;"></i> 
+                                {% else %} 
+                                    <i class="fas fa-times" style="color:red;"></i>
+                                {% endif %}
+                            </strong>
+                        </div>
+                        {% endif %}
+                        
+                    </div>
+                    {% if config.update %}
+                    <hr>
+                    <h4>Atualização Disponíveis</h4>
+                    <div class="row">
+                        <div class="col-sm">
+                            {{ config.sobreUpdate }}
+                        </div>
+                    </div>
+                    {% endif %}
+            </div>
+        </div>
+
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+    <script src="{{ url_for('static', filename='jquery.dataTables.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='main.js') }}"></script>
+{% endblock %}

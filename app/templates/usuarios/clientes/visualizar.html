@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block head %}
+{{ super() }}
+
+{% endblock %}
+
+{% block page_content %}
+<!-- Page Heading -->
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Visualizar usuário</h1>        
+    <div class="mb-2 mr-2">
+        <a href="{{ url_for('usuarios.editarCliente', id=meuPerfil.id) }}"><button class="btn btn-sm btn-success shadow-sm">Editar</button></a>        
+        <a href="{{ url_for('usuarios.clientes') }}"> <button class="btn btn-sm btn-danger shadow-sm">Voltar</button> </a>
+    </div>        
+  </div>
+
+<!-- Mensagens -->
+{% with messages = get_flashed_messages(with_categories=true) %}
+    <!-- Categories: success (green), info (blue), warning (yellow), danger (red) -->
+        {% if messages %}
+            {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                {{ message }}
+            </div>
+            {% endfor %}
+        {% endif %}
+{% endwith %}
+<!-- Mensagens -->
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+      <h6 class="m-0 font-weight-bold text-primary">Usuários </h6>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-sm-2">
+              <br>
+              <img src="{{ url_for('static', filename='images/' + meuPerfil.imagem) }}" class="img-thumbnail"> 
+            </div>
+            <div class="col-sm">
+              <br>
+                <div class="row">
+                    <div class="col">
+                      <strong>Nome do funcionário: </strong>  
+                      {{ meuPerfil.nome }}
+                    </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm">
+                    <strong>CPF: </strong>  
+                    {{ meuPerfil.CPF }}
+                  </div>
+                </div>   
+            </div>
+          </div>
+          <hr>
+          <h3>Informações de localização</h3>
+     <div class="row">
+        <div class="col-sm">
+            <p>
+                {% set url = meuPerfil.endereco.endereco+", "+(meuPerfil.endereco.numero|string)+", "+meuPerfil.endereco.municipio+"-"+meuPerfil.endereco.uf+", "+meuPerfil.endereco.pais %}
+                <a target="_blank" href="https://www.google.com/maps/search/?api=1&query={{url|replace(',','%2C')|replace(' ','+')}}"> Clique aqui para obter as direções <i class="fas fa-external-link-alt"></i></a>
+            </p>
+        </div>
+    </div>
+     
+    <div class="row">
+        <div class="col-sm">
+            <strong>Endereço: </strong>
+            {{ meuPerfil.endereco.endereco }}
+        </div>
+        <div class="col-sm-3">
+            <strong>Numero: </strong>
+            {{ meuPerfil.endereco.numero }}
+        </div>
+    </div>              
+    <strong>Bairro: </strong>
+    {{ meuPerfil.endereco.bairro }}<br>
+    <div class="row">               
+        <div class="col-sm">
+          <strong>UF: </strong>
+          {{ meuPerfil.endereco.uf }}
+        </div>
+        <div class="col-sm">
+              <strong>Pais: </strong>
+              {{ meuPerfil.endereco.pais }}
+          </div>
+        <div class="col-sm">
+          <strong>Municipio: </strong>
+          {{ meuPerfil.endereco.municipio }}                      
+        </div>
+        <div class="col-sm">
+              <strong>CEP: </strong>
+              {{ meuPerfil.endereco.cep }}
+          </div>
+          
+      </div>
+      <strong>Complemento: </strong>
+      {{ meuPerfil.endereco.complemento }}
+      <hr>
+      <h3>Informações de contato</h3>
+      <div class="row">
+        <div class="col-sm">
+          <strong>Telefone: </strong>  
+          <a href="tel:{{ meuPerfil.telefone }}">{{ meuPerfil.telefone }}</a> 
+        </div>
+        <div class="col-sm">
+          <strong>Celular: </strong>  
+          <a href="tel:{{ meuPerfil.celular }}">{{ meuPerfil.celular }}</a>
+        </div>
+      </div>
+  
+      <div class="row">
+        <div class="col-sm">
+          <strong>Email: </strong>
+          <a target="_blank" href="mailto:{{ meuPerfil.email }}">  
+          {{ meuPerfil.email }}</a>
+        </div>
+      </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+    <script src="{{ url_for('static', filename='jquery.dataTables.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='main.js') }}"></script>
+{% endblock %}

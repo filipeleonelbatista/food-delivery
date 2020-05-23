@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block head %}
+{{ super() }}
+{% endblock %}
+
+{% block page_content %}    
+<script>
+window.onload = function(){
+
+ var impressao =  document.getElementById('imprimir').innerHTML;
+  // var model = "<html><head><link href='//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css' rel='stylesheet'> <link rel='stylesheet' type='text/css' href='/static/styles.css'> <link rel='stylesheet' type='text/css' href='/static/main.css'></head><body><br><br>";
+  // var impressao =  document.getElementById('imprimir').innerHTML;
+  // var footer = "</body></html>"
+ 
+  var conteudo = impressao;
+  
+  // var conteudo = model + impressao + footer;
+
+  var tela_impressao = window.open('about:blank');
+      tela_impressao.document.write(conteudo);
+      setTimeout(function(){ 
+          tela_impressao.window.print();
+          tela_impressao.window.close();
+            history.go(-1);
+           }, 1000);
+      
+      
+}
+</script>
+
+<div id="imprimir">
+  <div style=" font-family: 'Lucida Console';font-size: 12px;width: 310px;height: 410px; background-color: rgb(219, 219, 171);">
+      {{ config.nomeFantasia }}<br>
+      {{ config.razaoSocial }}<br>
+      {{ config.CNPJ }}<br>
+      {{ config.endereco.endereco }}, {{ config.endereco.numero }} {{ config.endereco.bairro }}<br>
+      {{ config.endereco.municipio }}-{{ config.endereco.uf }}<br>
+      {{ config.telefone }}<br>
+      {{ config.email }}<br>
+      ------------------------------------------<br>
+      Dados do Cliente<br>
+      Nome: {{cliente.nome}} <br>
+      Endereco:{{enderURL}}<br>
+      Telefone: {{cliente.telefone}} {{cliente.celular}}<br>  
+      ------------------------------------------<br>
+      <table style="font-family: 'Lucida Console';font-size: 12px;width: 300px;">
+        <thead>
+          <tr>
+            <td> <p style="text-align:center">Qtd</p></td>
+            <td> <p style="text-align:left">Item</p></td>
+            <td> <p style="text-align:right">Preço</p></td>
+          </tr>
+        </thead>
+        <tbody>		
+            {% for item in itens %}
+            <tr>
+              <td> <p style="text-align:center">{{ item.quantidade }}</p></td>
+              <td> <p style="text-align:left">{{ item.produto }}</p></td>
+              <td> <p style="text-align:right">R${{ item.precoTotal|replace('.',',') }}</p></td>
+            </tr>
+            {% endfor %}	
+        </tbody>			
+        </table>
+      ------------------------------------------<br>
+      Subtotal: R$ {{pedido.subtotal|replace('.',',')}}<br>
+      Frete: R$ {{pedido.frete|replace('.',',')}}<br>
+      Desconto: R$ {{pedido.desconto|replace('.',',')}}<br>
+      Total: R$ {{pedido.total|replace('.',',')}}<br>
+      ------------------------------------------<br>
+      Observação:<br>
+      {{pedido.observacao}}<br>
+      ------------------------------------------<br>
+      Agradecemos pela preferencia!
+      
+      
+  </div>
+  </div>
+
+
+
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script src="{{ url_for('static', filename='moment.min.js') }}"></script>    
+<script src="{{ url_for('static', filename='jquery.dataTables.min.js') }}"></script>
+<script src="{{ url_for('static', filename='datetime-moment.js') }}"></script>
+<script src="{{ url_for('static', filename='tables.js') }}"></script>
+<style>
+    .borderless tr, .borderless td, .borderless th {
+      border: none !important;
+      font-family: 'Lucida Console';
+      font-size: 12px;
+      vertical-align: middle;		
+     }
+  </style>
+{% endblock %}

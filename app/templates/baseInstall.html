@@ -1,0 +1,138 @@
+{% extends "bootstrap/base.html" %}
+
+{% block title %}Administração{% endblock %}
+
+{% block head %}
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta http-equiv="x-ua-compatible" content="ie=edge">
+<link rel="shortcut icon" href="{{ url_for('static', filename='images/defaul-favicon.png') }}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='material/css/bootstrap.min.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='material/css/mdb.min.css') }}">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+
+
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
+    <style>
+::-webkit-scrollbar-track {
+    background-color: #F4F4F4;
+}
+::-webkit-scrollbar {
+    width: 6px;
+    background: #F4F4F4;
+}
+::-webkit-scrollbar-thumb {
+    background: #c7c7c7;
+}
+    </style>
+{% endblock %}
+
+{% block navbar %}
+
+{% endblock %}
+
+{% block content %}
+<style>
+    #irparacima {
+      display: none;
+      position: fixed;
+      bottom: 20px;
+      right: 30px;
+      z-index: 99;
+      font-size: 18px;
+      border: none;
+      outline: none;
+      background-color: #4285F4;
+      color: white;
+      cursor: pointer;
+      padding: 15px;
+      border-radius: 4px;
+    }
+
+    #irparacima:hover {
+      background-color: #0d47a1;
+    }
+    </style>
+    <button onclick="topFunction()" id="irparacima" title="Ir para o topo">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+    <div class="container">
+     <br>
+          {% block page_content %}{% endblock %}
+
+    </div>
+    <div data-aos="fade-up" data-aos-duration="1150" data-aos-delay="100" data-aos-once="true" class="footer-dark">
+
+      <footer>
+
+          <div class="container">
+
+              <div class="row">
+
+                  <div class="col-sm-6 col-md-3 item">
+
+                      <h3>Serviços</h3>
+
+                      <ul>
+
+                          <li><a href="#">Desenvolvimento de WebApps</a></li>
+
+                          <li><a href="#">Sistema de gestão de &nbsp;empresas</a></li>
+
+                          <li><a href="#">Criação de sites profissionais</a></li>
+
+                          <li><a href="#">Hospedagem</a></li>
+
+                      </ul>
+
+                  </div>
+
+                  <div class="col-sm-6 col-md-3 item">
+
+                      <h3>Sobre</h3>
+
+                      <ul>
+
+                          <li><a href="#">Empresa</a></li>
+
+                          <li><a href="#">Equipe</a></li>
+
+                          <li><a href="#">Trabalhe com a gente</a></li>
+
+                      </ul>
+
+                  </div>
+
+                  <div class="col-md-6 item text">
+
+                      <h3><img src="assets/img/logo1.png" width="200"></h3>
+
+                      <p>Empresa de tecnologia e desenvolvimento de aplicações para web.</p>
+
+                  </div>
+
+                  <div class="col item social"><a href="#"><i class="icon ion-social-facebook"></i></a><a href="#"><i class="icon ion-social-twitter"></i></a><a href="#"><i class="icon ion-social-whatsapp-outline"></i></a><a href="#"><i class="icon ion-social-instagram"></i></a>
+
+                      <a
+
+                          href="#"><i class="icon ion-social-youtube"></i></a><a href="#"><i class="icon ion-social-linkedin"></i></a><a href="#"><i class="icon ion-ios-email-outline"></i></a><a href="#"><i class="icon ion-ios-telephone"></i></a></div>
+
+              </div>
+
+              <p class="copyright">Desenvolvido por Leonel Informatica © 2019</p>
+
+          </div>
+
+      </footer>
+
+  </div>
+
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='material/js/jquery-3.3.1.min.js') }}"></script>
+<script src="{{ url_for('static', filename='material/js/popper.min.js') }}"></script>
+<script src="{{ url_for('static', filename='material/js/bootstrap.min.js') }}"></script>
+<script src="{{ url_for('static', filename='material/js/mdb.min.js') }}"></script>
+{% endblock %}
