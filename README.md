@@ -1,5 +1,5 @@
 <h1 align="center">
-    <img alt="FoodDelivery" title="#delicinha" src="gitimagens/logo.svg" width="200px" />
+    <img alt="FoodDelivery" title="#delicinha" src="gitimagens/logo.png" width="200px" />
 </h1>
 
 <h4 align="center">
