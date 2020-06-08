@@ -1,5 +1,5 @@
 <h1 align="center">
-    <img alt="FoodDelivery" title="#delicinha" src="gitimages/logo.svg" width="200px" />
+    <img alt="FoodDelivery" title="#delicinha" src="gitimagens/logo.svg" width="200px" />
 </h1>
 
 <h4 align="center">
@@ -7,9 +7,9 @@
 </h4>
 
 <p align="center">
- <img src="github-img/label.png" height="30px" alt="Status do projeto, em desenvolvimento" />
+ <img src="gitimagens/label.png" height="30px" alt="Status do projeto, em desenvolvimento" />
 
- <img src="github-img/label-v1.png" height="30px" alt="Versão atual do projeto, 1.0">
+ <img src="gitimagens/label-v1.png" height="30px" alt="Versão atual do projeto, 1.0">
 </p>
 
 <p align="center">
