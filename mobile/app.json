@@ -9,12 +9,41 @@
     ],
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/icon-wt-bg.png",
     "splash": {
       "image": "./assets/splash.png",
-      "resizeMode": "contain",
+      "resizeMode": "cover",
       "backgroundColor": "#ffffff"
     },
+    // "ios": {
+    //   "icon": "./assets/icon-wt-bg.png",
+    //   "splash": {
+    //     "backgroundColor": "#ffffff",
+    //     "resizeMode": "cover",
+    //     "image": "./assets/splash.png"
+    //   },      
+    //   "bundleIdentifier": "com.apk.mobile"
+    // },
+    // "android": {
+    //   "package": "com.apk.mobile",
+    //   "icon": "./assets/icon-wt-bg.png",
+    //   "adaptiveIcon": {
+    //     "foregroundImage": "./assets/icon-wt-bg.png",
+    //     "backgroundColor": "#FFF",
+    //     // "backgroundImage": "./assets/icon-bg.png"
+    //   },
+    //   "splash": {
+    //     "backgroundColor": "#FFF",
+    //     "resizeMode": "cover",
+    //     "mdpi": "./assets/android/drawable-mdpi/screen.png", // natural sized image (baseline)
+    //     "hdpi": "./assets/android/drawable-hdpi/screen.png", // scale 1.5x
+    //     "xhdpi": "./assets/android/drawable-xhdpi/screen.png", // scale 2x
+    //     "xxhdpi": "./assets/android/drawable-xxhdpi/screen.png", // scale 3x
+    //     "xxxhdpi": "./assets/android/drawable-xxxhdpi/screen.png" // scale 4x
+    //   },
+      
+    // },
+    "privacy": "public",
     "updates": {
       "fallbackToCacheTimeout": 0
     },
@@ -23,6 +52,7 @@
     ],
     "ios": {
       "supportsTablet": true
-    }
+    },
+    "description": ""
   }
 }

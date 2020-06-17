@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, Linking, KeyboardAvoidingView, TextInput, Text, View, Image } from 'react-native';
+import { StyleSheet, Linking, KeyboardAvoidingView, TextInput, Text, View, Image, Alert } from 'react-native';
 import { RectButton } from 'react-native-gesture-handler';
 
 import PasswordInput from '../../Components/PasswordInput';
@@ -9,7 +9,12 @@ import { Feather as Icon } from '@expo/vector-icons';
 
 import { useNavigation } from '@react-navigation/native';
 
-import Logo from '../../Assets/logo.png'
+import Logo from '../../Assets/logo.png';
+
+const user = {
+    email: '',
+    password: '',
+}
 
 export default function LoginScreen() {
 
@@ -20,9 +25,20 @@ export default function LoginScreen() {
     const [password, setPassword] = useState('');
 
     function handleNavigateToHome() {
-        navigation.navigate('Home', { email, password });
-    }
 
+        if ((user.email === email)&&(user.password === password)) {
+            navigation.navigate('Root', { screen: 'Home', params: { email, password } });
+        }else{
+            Alert.alert(
+                "Ops...",
+                "Usuário ou senha incorretos!",
+                [
+                  { text: "OK", onPress: () => console.log("OK Pressed") }
+                ],
+                { cancelable: false }
+              );
+        }
+    }
 
     return (
         <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
@@ -48,7 +64,7 @@ export default function LoginScreen() {
                         Cadastre-se Aqui!
                             </Text>
 
-                    <View style={{ marginTop: 16 }}>
+                    <View style={{ marginTop: 16 }}>                        
                         <TextInputStyled label="Email" onChange={setEmail} />
                     </View>
                     <View style={{ marginTop: 16 }}>

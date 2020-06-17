@@ -5,6 +5,7 @@ class PasswordInput extends React.Component{
     state = {
         icon: 'eye-off',
         password: true,
+        isFocused: false,
     };
 
     _changeIcon(){
@@ -14,17 +15,37 @@ class PasswordInput extends React.Component{
         }));
     }
 
+    handleFocus = event =>{
+        this.setState({ isFocused: true })
+        if(this.props.onFocus){
+            this.props.onFocus(event);
+        }
+    };
+    handleBlur = event =>{
+        this.setState({ isFocused: false })
+        if(this.props.onBlur){
+            this.props.onBlur(event);
+        }
+    };
+
     render(){
+        const { isFocused } = this.state;
         const { label, icon, onChange } = this.props;
         return(
             <Item floatingLabel>
                 {/* <Icon active name={icon} /> */}
                 <Label>{label}</Label>
-                <Input secureTextEntry={this.state.password} onChangeText={(e) => { onChange(e)}} />
+                <Input
+                    selectionColor={ isFocused ? "#F00" : "#D3D3D3"} 
+                    underlineColorAndroid={ isFocused ? "#F00" : "#D3D3D3"} 
+                    onFocus={this.handleFocus}
+                    onBlur={this.handleBlur} 
+                    secureTextEntry={this.state.password} 
+                    onChangeText={(e) => { onChange(e)}} />
                 <Icon name={this.state.icon} onPress={() => this._changeIcon()} />
             </Item>
         );
     }
 }
 
-export default PasswordInput;
+export default PasswordInput; 
