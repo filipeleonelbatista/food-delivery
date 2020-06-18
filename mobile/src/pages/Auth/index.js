@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, Linking, KeyboardAvoidingView, TextInput, Text, View, Image, Alert } from 'react-native';
+import { StyleSheet, Linking, KeyboardAvoidingView, TextInput, Text, View, Image, Alert, Platform } from 'react-native';
 import { RectButton } from 'react-native-gesture-handler';
 
 import PasswordInput from '../../Components/PasswordInput';

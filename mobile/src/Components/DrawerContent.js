@@ -1,5 +1,5 @@
 import React, { BackHandler } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, Alert } from 'react-native';
 import {
   useTheme,
   Avatar,
@@ -16,15 +16,34 @@ import {
   DrawerItem
 } from '@react-navigation/drawer';
 
-import Icon from 'react-native-vector-icons/FontAwesome5';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import Toast from 'react-native-tiny-toast'
+
+import AvatarDefault from '../Assets/avatar-default.jpg'
 
 export default function DrawerContent(props) {
   const paperTheme = useTheme();
   function handleExit() {
-    Toast.show('Saindo da aplicação')
-    props.navigation.navigate('LoginScreen')
+    Alert.alert(
+      "Sair da aplicação",
+      "Deseja realmente sair da aplicação?",
+      [
+        {
+          text: "Sim", onPress: () => {
+
+            Toast.show('Saindo da aplicação')
+            props.navigation.navigate('Login')
+          }
+        },
+        {
+          text: "Não", onPress: () => {
+            props.navigation.closeDrawer();
+          }
+        }
+      ],
+      { cancelable: false }
+    );
   }
   return (
     <View style={{ flex: 1 }}>
@@ -33,9 +52,7 @@ export default function DrawerContent(props) {
           <View style={styles.userInfoSection}>
             <View style={{ flexDirection: 'row', marginTop: 15 }}>
               <Avatar.Image
-                source={{
-                  uri: 'https://api.adorable.io/avatars/50/abott@adorable.png'
-                }}
+                source={AvatarDefault}
                 size={50}
               />
               <View style={{ marginLeft: 15, flexDirection: 'column' }}>
@@ -60,7 +77,7 @@ export default function DrawerContent(props) {
             <DrawerItem
               icon={({ color, size }) => (
                 <Icon
-                  name="id-badge"
+                  name="account-badge-outline"
                   color={color}
                   size={size}
                 />
@@ -74,7 +91,7 @@ export default function DrawerContent(props) {
             <DrawerItem
               icon={({ color, size }) => (
                 <Icon
-                  name="tachometer-alt"
+                  name="view-dashboard-outline"
                   color={color}
                   size={size}
                 />
@@ -87,7 +104,7 @@ export default function DrawerContent(props) {
             <DrawerItem
               icon={({ color, size }) => (
                 <Icon
-                  name="cash-register"
+                  name="wallet-outline"
                   color={color}
                   size={size}
                 />
@@ -98,7 +115,7 @@ export default function DrawerContent(props) {
             <DrawerItem
               icon={({ color, size }) => (
                 <Icon
-                  name="users"
+                  name="account-group"
                   color={color}
                   size={size}
                 />
@@ -109,7 +126,7 @@ export default function DrawerContent(props) {
             <DrawerItem
               icon={({ color, size }) => (
                 <Icon
-                  name="file-alt"
+                  name="file-document-outline"
                   color={color}
                   size={size}
                 />
@@ -120,7 +137,7 @@ export default function DrawerContent(props) {
             <DrawerItem
               icon={({ color, size }) => (
                 <Icon
-                  name="boxes"
+                  name="inbox-multiple"
                   color={color}
                   size={size}
                 />
@@ -131,7 +148,7 @@ export default function DrawerContent(props) {
             <DrawerItem
               icon={({ color, size }) => (
                 <Icon
-                  name="motorcycle"
+                  name="truck-delivery"
                   color={color}
                   size={size}
                 />
@@ -142,7 +159,7 @@ export default function DrawerContent(props) {
             <DrawerItem
               icon={({ color, size }) => (
                 <Icon
-                  name="utensils"
+                  name="food"
                   color={color}
                   size={size}
                 />
@@ -156,7 +173,7 @@ export default function DrawerContent(props) {
             <DrawerItem
               icon={({ color, size }) => (
                 <Icon
-                  name="user-friends"
+                  name="account-group-outline"
                   color={color}
                   size={size}
                 />
@@ -182,7 +199,7 @@ export default function DrawerContent(props) {
         <DrawerItem
           icon={({ color, size }) => (
             <Icon
-              name="sign-out-alt"
+              name="logout"
               color={color}
               size={size}
             />

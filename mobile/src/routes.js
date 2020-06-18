@@ -6,8 +6,6 @@ import { createStackNavigator } from '@react-navigation/stack';
 import LoginScreen from './pages/Auth/index';
 import Home from './pages/Home/index';
 
-import { StyleSheet, Linking, KeyboardAvoidingView, TextInput, Text, View, Image, Alert } from 'react-native';
-
 import DrawerContent from './Components/DrawerContent';
 
 const Drawer = createDrawerNavigator();
@@ -17,7 +15,6 @@ function Root() {
   return (
     <Drawer.Navigator initialRouteName="Home" drawerContent={(props) => <DrawerContent {...props} />}>
       <Drawer.Screen name="Home" component={Home} />
-      <Drawer.Screen name="LoginScreen" component={LoginScreen} />
     </Drawer.Navigator>
   );
 }
