@@ -1,11 +1,10 @@
 {
   "expo": {
-    "name": "mobile",
-    "slug": "mobile",
+    "name": "Food Delivery",
+    "slug": "food-delivery",
     "platforms": [
       "ios",
-      "android",
-      "web"
+      "android"
     ],
     "version": "1.0.0",
     "orientation": "portrait",
@@ -15,23 +14,25 @@
       "resizeMode": "cover",
       "backgroundColor": "#ffffff"
     },
-    // "ios": {
+    "ios": {
     //   "icon": "./assets/icon-wt-bg.png",
     //   "splash": {
     //     "backgroundColor": "#ffffff",
     //     "resizeMode": "cover",
     //     "image": "./assets/splash.png"
     //   },      
-    //   "bundleIdentifier": "com.apk.mobile"
-    // },
-    // "android": {
-    //   "package": "com.apk.mobile",
+      "bundleIdentifier": "com.leonelinformatica.fooddelivery",
+      "buildNumber": "1.0.0",
+      "supportsTablet": true
+    },
+    "android": {
+      "package": "com.leonelinformatica.fooddelivery",
     //   "icon": "./assets/icon-wt-bg.png",
-    //   "adaptiveIcon": {
-    //     "foregroundImage": "./assets/icon-wt-bg.png",
-    //     "backgroundColor": "#FFF",
-    //     // "backgroundImage": "./assets/icon-bg.png"
-    //   },
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/icon-wt-bg.png",
+        // "backgroundColor": "#FFF",
+        "backgroundImage": "./assets/icon-bg.png"
+      },
     //   "splash": {
     //     "backgroundColor": "#FFF",
     //     "resizeMode": "cover",
@@ -42,7 +43,7 @@
     //     "xxxhdpi": "./assets/android/drawable-xxxhdpi/screen.png" // scale 4x
     //   },
       
-    // },
+    },
     "privacy": "public",
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -50,9 +51,6 @@
     "assetBundlePatterns": [
       "**/*"
     ],
-    "ios": {
-      "supportsTablet": true
-    },
     "description": ""
   }
 }
