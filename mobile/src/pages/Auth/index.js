@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, Linking, KeyboardAvoidingView, TextInput, Text, View, Image, Alert, Platform } from 'react-native';
+import { StyleSheet, Linking, KeyboardAvoidingView, TextInput, Text, View, Image, Alert, Platform, ImageBackground } from 'react-native';
 import { RectButton } from 'react-native-gesture-handler';
 
 import PasswordInput from '../../Components/PasswordInput';
@@ -10,6 +10,7 @@ import { Feather as Icon } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 
 import Logo from '../../Assets/logo.png';
+import LoginBackground from '../../Assets/loginBackground.jpg';
 
 const user = {
     email: '',
@@ -26,73 +27,81 @@ export default function LoginScreen() {
 
     function handleNavigateToHome() {
 
-        if ((user.email === email)&&(user.password === password)) {
+        if ((user.email === email) && (user.password === password)) {
             navigation.navigate('Root', { screen: 'Home', params: { email, password } });
-        }else{
+        } else {
             Alert.alert(
                 "Ops...",
                 "Usuário ou senha incorretos!",
                 [
-                  { text: "OK", onPress: () => console.log("OK Pressed") }
+                    { text: "OK", onPress: () => console.log("OK Pressed") }
                 ],
                 { cancelable: false }
-              );
+            );
         }
     }
 
     return (
-        <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
-            <View style={styles.container}>
-                <Image style={styles.img} source={Logo} />
+        <ImageBackground source={LoginBackground} style={styles.image}>
+            <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+                <View style={styles.container}>
+                    <Image style={styles.img} source={Logo} />
 
-                <View style={styles.form}>
-                    <Text style={{
-                        color: '#888',
-                        textAlign: 'center',
-                        fontSize: 18
-                    }} >
-                        Entre com seu email ou senha ou
-                </Text>
-                    <Text style={{
-                        color: '#F00',
-                        textAlign: 'center',
-                        fontSize: 18
-                    }}
-                        onPress={() => {
-                            Linking.openURL('https://google.com')
-                        }} >
-                        Cadastre-se Aqui!
-                            </Text>
+                    <View style={styles.form}>
+                        <View style={styles.box}>
+                            <Text style={{
+                                color: '#888',
+                                textAlign: 'center',
+                                fontSize: 18
+                            }} >
+                                Entre com seu email ou senha ou
+                        </Text>
+                            <Text style={{
+                                color: '#F00',
+                                textAlign: 'center',
+                                fontSize: 18
+                            }}
+                                onPress={() => {
+                                    Linking.openURL('https://google.com')
+                                }} >
+                                Cadastre-se Aqui!
+                        </Text>
 
-                    <View style={{ marginTop: 16 }}>                        
-                        <TextInputStyled label="Email" onChange={setEmail} />
-                    </View>
-                    <View style={{ marginTop: 16 }}>
-                        <PasswordInput label="Senha" onChange={setPassword} />
-                    </View>
+                            <View style={{ marginTop: 16 }}>
+                                <TextInputStyled label="Email" onChange={setEmail} />
+                            </View>
+                            <View style={{ marginTop: 16 }}>
+                                <PasswordInput label="Senha" onChange={setPassword} />
+                            </View>
 
-                    <Text style={styles.forgot} >
-                        Esqueceu a senha?
-                </Text>
-                    <RectButton style={styles.button} onPress={handleNavigateToHome} >
-                        <View style={styles.buttonIcon}>
-                            <Text>
-                                <Icon name="log-in" color="#fff" size={24} />
-                            </Text>
+                            <Text style={styles.forgot} >
+                                Esqueceu a senha?
+                        </Text>
+                            
                         </View>
-                        <Text style={styles.buttonText}>Entrar</Text>
-                    </RectButton>
+                        <RectButton style={styles.button} onPress={handleNavigateToHome} >
+                                <View style={styles.buttonIcon}>
+                                    <Text>
+                                        <Icon name="log-in" color="#fff" size={24} />
+                                    </Text>
+                                </View>
+                                <Text style={styles.buttonText}>Entrar</Text>
+                            </RectButton>
+                    </View>
                 </View>
-            </View>
-
-        </KeyboardAvoidingView>
+            </KeyboardAvoidingView>
+        </ImageBackground>
     );
 }
 
 const styles = StyleSheet.create({
+    image: {
+        flex: 1,
+        resizeMode: "cover",
+        justifyContent: "center"
+    },
     container: {
         flex: 1,
-        backgroundColor: '#fff',
         alignItems: 'center',
         justifyContent: 'center',
     },
@@ -108,11 +117,25 @@ const styles = StyleSheet.create({
         marginTop: 64,
         alignItems: 'center',
     },
+    box: {
+        backgroundColor: "#FFFFFF",
+        padding: 16,
+        borderRadius:8,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 3,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+
+        elevation: 8,
+    },
     form: {
         flex: 1,
         marginTop: 64,
-        marginLeft: 16,
-        marginRight: 16,
+        marginLeft: 8,
+        marginRight: 8,
     },
     button: {
         flexDirection: 'row',
