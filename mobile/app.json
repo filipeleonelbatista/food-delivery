@@ -30,7 +30,7 @@
     //   "icon": "./assets/icon-wt-bg.png",
       "adaptiveIcon": {
         "foregroundImage": "./assets/icon-wt-bg.png",
-        // "backgroundColor": "#FFF",
+        // "backgroundColor": "#E20030",
         "backgroundImage": "./assets/icon-bg.png"
       },
     //   "splash": {

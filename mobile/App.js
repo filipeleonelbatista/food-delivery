@@ -21,8 +21,8 @@ export default function App() {
   }
   return (
     <>
-      <View style={{ paddingTop: 24, backgroundColor:'#F00' }}>
-        <StatusBar barStyle="default"
+      <View style={{ paddingTop: 24, backgroundColor:'#E20030' }}>
+        <StatusBar barStyle="light-content"
           backgroundColor="transparent"
           translucent
         />

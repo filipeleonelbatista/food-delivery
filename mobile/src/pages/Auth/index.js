@@ -57,7 +57,7 @@ export default function LoginScreen() {
                                 Entre com seu email ou senha ou
                         </Text>
                             <Text style={{
-                                color: '#F00',
+                                color: '#E20030',
                                 textAlign: 'center',
                                 fontSize: 18
                             }}
@@ -107,7 +107,7 @@ const styles = StyleSheet.create({
     },
     forgot: {
         textAlign: 'right',
-        color: '#F00',
+        color: '#E20030',
         fontSize: 14,
         fontWeight: 'bold',
         marginTop: 16,

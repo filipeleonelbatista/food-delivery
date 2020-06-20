@@ -36,8 +36,8 @@ class PasswordInput extends React.Component{
                 {/* <Icon active name={icon} /> */}
                 <Label>{label}</Label>
                 <Input
-                    selectionColor={ isFocused ? "#F00" : "#D3D3D3"} 
-                    underlineColorAndroid={ isFocused ? "#F00" : "#D3D3D3"} 
+                    selectionColor={ isFocused ? "#E20030" : "#D3D3D3"} 
+                    underlineColorAndroid={ isFocused ? "#E20030" : "#D3D3D3"} 
                     onFocus={this.handleFocus}
                     onBlur={this.handleBlur} 
                     secureTextEntry={this.state.password} 

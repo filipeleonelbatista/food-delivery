@@ -197,7 +197,7 @@ const styles = StyleSheet.create({
     headerButton: {
         height: 48,
         width: 48,
-        backgroundColor: '#FF000099',
+        backgroundColor: '#E20030',
         justifyContent: 'center',
         alignItems: 'center',
     },
@@ -233,7 +233,7 @@ const styles = StyleSheet.create({
     },
     header: {
         height: 48,
-        backgroundColor: "#f00",
+        backgroundColor: "#E20030",
         flexDirection: 'column',
         marginBottom: 8,
         shadowColor: "#000",
@@ -251,7 +251,7 @@ const styles = StyleSheet.create({
         marginBottom: 16,
     },
     cardTextTitle: {
-        color: "#F00",
+        color: "#E20030",
         fontWeight: 'normal',
         fontSize: 16
     },
@@ -281,7 +281,6 @@ const styles = StyleSheet.create({
         marginTop: 16,
         marginBottom: 32,
     },
-
     item: {
         backgroundColor: '#fff',
         height: 96,
@@ -291,9 +290,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
-
     selectedItem: {
-        borderColor: '#F00',
+        borderColor: '#E20030',
     },
     itemImage: {
         width: 42,
@@ -305,7 +303,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
     },
     bdColorRed: {
-        borderLeftColor: '#F00',
+        borderLeftColor: '#E20030',
     },
     bdColorPrimary: {
         borderLeftColor: '#3279fd',

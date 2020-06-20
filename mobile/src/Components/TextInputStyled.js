@@ -28,8 +28,8 @@ class TextInputStyled extends React.Component{
             <Item floatingLabel>
                 <Label>{label}</Label>
                 <Input 
-                    selectionColor={ isFocused ? "#F00" : "#D3D3D3"} 
-                    underlineColorAndroid={ isFocused ? "#F00" : "#D3D3D3"} 
+                    selectionColor={ isFocused ? "#E20030" : "#D3D3D3"} 
+                    underlineColorAndroid={ isFocused ? "#E20030" : "#D3D3D3"} 
                     onFocus={this.handleFocus}
                     onBlur={this.handleBlur}
                     onChangeText={(e) => { onChange(e)}} 

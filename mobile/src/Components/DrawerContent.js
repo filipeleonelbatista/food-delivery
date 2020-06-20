@@ -212,7 +212,7 @@ const styles = StyleSheet.create({
   userInfoSection: {
     paddingLeft: 20,
     paddingBottom: 20,
-    backgroundColor: '#F00'
+    backgroundColor: '#E20030'
   },
   title: {
     fontSize: 16,
