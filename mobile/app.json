@@ -15,34 +15,17 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-    //   "icon": "./assets/icon-wt-bg.png",
-    //   "splash": {
-    //     "backgroundColor": "#ffffff",
-    //     "resizeMode": "cover",
-    //     "image": "./assets/splash.png"
-    //   },      
       "bundleIdentifier": "com.leonelinformatica.fooddelivery",
       "buildNumber": "1.0.0",
       "supportsTablet": true
     },
     "android": {
       "package": "com.leonelinformatica.fooddelivery",
-    //   "icon": "./assets/icon-wt-bg.png",
       "adaptiveIcon": {
         "foregroundImage": "./assets/icon-wt-bg.png",
         // "backgroundColor": "#E20030",
         "backgroundImage": "./assets/icon-bg.png"
-      },
-    //   "splash": {
-    //     "backgroundColor": "#FFF",
-    //     "resizeMode": "cover",
-    //     "mdpi": "./assets/android/drawable-mdpi/screen.png", // natural sized image (baseline)
-    //     "hdpi": "./assets/android/drawable-hdpi/screen.png", // scale 1.5x
-    //     "xhdpi": "./assets/android/drawable-xhdpi/screen.png", // scale 2x
-    //     "xxhdpi": "./assets/android/drawable-xxhdpi/screen.png", // scale 3x
-    //     "xxxhdpi": "./assets/android/drawable-xxxhdpi/screen.png" // scale 4x
-    //   },
-      
+      }
     },
     "privacy": "public",
     "updates": {

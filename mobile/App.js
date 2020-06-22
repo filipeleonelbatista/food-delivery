@@ -7,6 +7,9 @@ import { Ubuntu_700Bold, useFonts } from '@expo-google-fonts/ubuntu'
 
 import Routes from './src/routes'
 
+
+import { Provider as PaperProvider } from 'react-native-paper';
+
 export default function App() {
 
   const [fontsLoaded] = useFonts({
@@ -21,14 +24,17 @@ export default function App() {
   }
   return (
     <>
-      <View style={{ paddingTop: 24, backgroundColor:'#E20030' }}>
-        <StatusBar barStyle="light-content"
-          backgroundColor="transparent"
-          translucent
-        />
-      </View>
 
-      <Routes />
+      <PaperProvider>
+        <View style={{ paddingTop: 24, backgroundColor: '#E20030' }}>
+          <StatusBar barStyle="light-content"
+            backgroundColor="transparent"
+            translucent
+          />
+        </View>
+
+        <Routes />
+      </PaperProvider>
     </>
   );
 }

@@ -1,5 +1,5 @@
 import React, { BackHandler } from 'react';
-import { StyleSheet, View, Alert, ImageBackground } from 'react-native';
+import { StyleSheet, View, Alert, Image } from 'react-native';
 
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
@@ -57,12 +57,12 @@ export default function DrawerContent(props) {
             activeOpacity={0.6}
             style={styles.item}
           >
-            <Avatar.Image
+            <Image
               source={AvatarDefault}
-              size={64}
               style={{
-                alignItems: 'center',
-                justifyContent: 'center',
+                height: 64,
+                width: 64,
+                borderRadius: 32,
               }}
             />
           </TouchableOpacity>
@@ -71,14 +71,13 @@ export default function DrawerContent(props) {
             <Caption style={styles.caption}>Adm. do sistema</Caption>
           </View>
         </View>
-        <View style={{flexDirection:'column', marginTop:16}}>
-          <Paragraph style={[styles.paragraph, styles.caption]}>Ganhos</Paragraph>
-          <View style={{flexDirection:'row', marginTop:8, alignItems:'center'}}>
-            <View style={{ flex: 1, flexDirection:'column', alignItems:'center' }}>
+        <View style={{ flexDirection: 'column', marginTop: 16 }}>
+          <View style={{ flexDirection: 'row', marginTop: 8, alignItems: 'center' }}>
+            <View style={{ flex: 1, flexDirection: 'column', alignItems: 'center' }}>
               <Paragraph style={[styles.paragraph, styles.caption]}>R$ 80,00 </Paragraph>
               <Caption style={styles.caption}>Diário</Caption>
             </View>
-            <View style={{ flex: 1, flexDirection:'column', alignItems:'center' }}>
+            <View style={{ flex: 1, flexDirection: 'column', alignItems: 'center' }}>
               <Paragraph style={[styles.paragraph, styles.caption, { flex: 1 }]}>R$ 180,00 </Paragraph>
               <Caption style={styles.caption}>Mensal</Caption>
             </View>
@@ -91,7 +90,7 @@ export default function DrawerContent(props) {
             <DrawerItem
               icon={({ color, size }) => (
                 <Icon
-                  name="view-dashboard-outline"
+                  name="home"
                   color={color}
                   size={size}
                 />
@@ -123,11 +122,16 @@ export default function DrawerContent(props) {
             />
             <DrawerItem
               icon={({ color, size }) => (
+                <>
+                <View style={styles.notification}>
+                  <Text style={styles.notificationText}>1</Text>
+                </View>
                 <Icon
                   name="file-document-outline"
                   color={color}
                   size={size}
                 />
+                </>
               )}
               label="Pedidos"
               onPress={() => { }}
@@ -140,7 +144,7 @@ export default function DrawerContent(props) {
                   size={size}
                 />
               )}
-              label="Produtos"
+              label="Cardápio"
               onPress={() => { }}
             />
             <DrawerItem
@@ -259,4 +263,28 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 16,
   },
+  notification:{
+    position:'absolute',
+    top: 8,
+    left: 20,
+    width: 16,
+    height: 16,
+    borderRadius: 8,
+    backgroundColor:"#F00",
+    shadowColor: "#FFF",
+    shadowOffset: {
+        width: 0,
+        height: 3,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+
+    elevation: 6,
+    alignItems:'center',
+    justifyContent: 'center',
+},
+notificationText:{
+    color:"#FFF",
+    fontSize:10,
+},
 });
