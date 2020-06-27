@@ -2,11 +2,12 @@ import React from 'react';
 import logo from '../../logo.svg';
 import './index.css';
 
-import {} from 'react-icons/fa';
+import Navbar from '../../components/Navbar/Navbar';
+import Footer from '../../components/Footer/Footer';
 
 import Navbar from '../../components/Navbar';
 
-function Home() {
+function Default() {
     const year = new Date().getFullYear();
     return (
         <>
@@ -26,17 +27,10 @@ function Home() {
                         Saiba mais
                     </a>
                 </header>
-                <footer>
-                    <p>&copy; {year} - FOOD Delivery - Simplificando a gestão de delivery</p>
-                    <p>Desenvolvido por <a href="#">Leonel Informática</a></p>
-                    <div className="social">
-                        <i></i>
-                    </div>
-
-                </footer>
+                <Footer />
             </div>
         </>
     );
 }
 
-export default Home;
+export default Default;

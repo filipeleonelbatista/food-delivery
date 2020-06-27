@@ -1,0 +1,31 @@
+
+  /* Footer */
+
+  footer{
+    margin: 35px 0;
+    justify-content: center;
+  }
+  
+  .social{
+    font-size: 32px;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .social-item{
+    color: #E20030;
+    margin: 0 4px;
+  }
+  
+  .social-item:hover{
+    color: #ad062a;
+    cursor: pointer;
+  }
+  
+  footer a{  
+    color: #E20030;
+  }
+  footer a:hover{
+    color: #ad062a;
+    cursor: pointer;
+  }
