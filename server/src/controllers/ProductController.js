@@ -20,5 +20,13 @@ module.exports = {
     })
 
     return response.json({ id });
-  }
+  },
+
+  async show(request, response) {
+    const prod = await connection('products').where({id: request.params.id}).select('*');
+    const opt = await connection('optional').where({id_product: prod[0].id}).select('*');
+
+    return response.json({prod, opt});
+  },
+
 }

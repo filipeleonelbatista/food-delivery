@@ -2,23 +2,23 @@ import React from 'react';
 import logo from '../../assets/logo.svg';
 import './Navbar.css';
 
-import { Link } from 'react-router-dom';
+import { NavLink, Link } from 'react-router-dom';
 
 function Navbar() {
     return (
         <nav className="Navbar">
             <div className="logo">
-                <Link className="nav-title" to="/">
+                <Link exact to="/" className="nav-title">
                     <img src={logo} className="Nav-logo" alt="logo" />
                     <p>FOOD Delivery</p>
                 </Link>
             </div>
             <div className="menu-items">
                 <ul>
-                    <li><Link className="nav-item" to="/">Inicio</Link></li>
-                    <li><Link className="nav-item" to="/menu">Menu</Link></li>
-                    <li><Link className="nav-item" to="/contact">Contato</Link></li>
-                    <li><Link className="nav-item" to="#">Cadastre-se</Link></li>
+                    <li><NavLink exact to="/" activeClassName="active" className="nav-item">Inicio</NavLink></li>
+                    <li><NavLink activeClassName="active" className="nav-item" to="/menu">Menu</NavLink></li>
+                    <li><NavLink activeClassName="active" className="nav-item" to="/contact">Contato</NavLink></li>
+                    {/* <li><NavLink activeClassName="active" className="nav-item" to="#">Cadastre-se</NavLink></li> */}
                 </ul>
             </div>
         </nav>

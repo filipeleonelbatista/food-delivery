@@ -14,6 +14,7 @@ routes.get('/category', CategoryController.index);
 routes.get('/optional', OptionalController.index);
 routes.get('/paymentMethod', PaymentMethodController.index);
 routes.get('/product', ProductController.index);
+routes.get('/product/:id', ProductController.show);
 routes.get('/menu', MenuController.index);
 
 

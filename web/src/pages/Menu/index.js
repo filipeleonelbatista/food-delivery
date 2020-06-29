@@ -1,156 +1,76 @@
 import React, { useEffect, useState } from 'react';
 import './index.css';
 
+import { Link } from 'react-router-dom';
+
 import api from '../../services/api';
 
 import Navbar from '../../components/Navbar/Navbar';
 import Footer from '../../components/Footer/Footer';
 
 function Menu() {
+    const [categories, setCategories] = useState([])
     const [items, setItems] = useState([])
+
     useEffect(() => {
-        api.get('product').then(response => {
-            console.log(response.data);
-            setItems(response.data);
+        api.get('category').then(response => {
+            setCategories(response.data);
         })
     }, []);
 
-
+    useEffect(() => {
+        api.get('product').then(response => {
+            setItems(response.data);
+        })
+    }, []);
+    
     return (
         <>
             <Navbar />
             <div className="body">
                 <div className="categories">
                     <div className="categories-group">
-
-                        <div className="category-item">
-                            <div className="category-title">
-                                Tudo
-                            </div>
-                        </div>
-
-                        <div className="category-item">
-                            <div className="category-title">
-                                Item
-                            </div>
-                        </div>
-
-                        <div className="category-item">
-                            <div className="category-title">
-                                Item
-                            </div>
-                        </div>
-
-                        <div className="category-item">
-                            <div className="category-title">
-                                Item
-                            </div>
-                        </div>
-
-                        <div className="category-item">
-                            <div className="category-title">
-                                Item
-                            </div>
-                        </div>
+                        {categories.map(cat => {
+                            return (
+                                <div key={cat.id} className="category-item">
+                                    <div className="category-title">
+                                        {cat.name}
+                                    </div>
+                                </div>
+                            )
+                        })}
 
                     </div>
                 </div>
                 <div className="cards mt-10">
 
-                    <div className="card-item ac">
-                        <div className="card-item-image">
-                            <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1202&q=80" alt="" srcset="" />
-                        </div>
-                        <div className="card-item-col">
-                            <div className="card-item-row ai jc-space ml-10">
-                                <div className="card-item-title">
-                                    Comida 1
+                    {items.map(item => {
+                        return (
+                              <Link to={"/product/" + item.id}>
+                                <div key={item.id} className="card-item ac">
+                                    <div className="card-item-image">
+                                        <img src={item.image} alt={item.name} />
+                                    </div>
+                                    <div className="card-item-col pg-10">
+                                        <div className="card-item-title mt-10">
+                                            {item.name}
+                                        </div>
+                                        <div className="card-item-description mt-10">
+                                            {item.description}
+                                        </div>
+                                        <div className="card-item-row mt-10 ac">
+                                            <div className="card-item-value">
+                                                R$ {item.value}
+                                            </div>
+                                            <div className="card-item-value-discount ml-10 ">
+                                                R$ {item.value}
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div className="card-item-value">
-                                    R$ 10,00
-                                </div>
-                            </div>
-                            <div className="card-item-description ml-10">
-                                Hamburguer com tudo o que se pode desejar de mais gostoso neste mundo...
-                                </div>
-                        </div>
-                    </div>
-
-                    <div className="card-item ac">
-                        <div className="card-item-image">
-                            <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1202&q=80" alt="" srcset="" />
-                        </div>
-                        <div className="card-item-col">
-                            <div className="card-item-row ai jc-space ml-10">
-                                <div className="card-item-title">
-                                    Comida 1
-                                </div>
-                                <div className="card-item-value">
-                                    R$ 10,00
-                                </div>
-                            </div>
-                            <div className="card-item-description ml-10">
-                                Hamburguer com tudo o que se pode desejar de mais gostoso neste mundo...
-                                </div>
-                        </div>
-                    </div>
-
-                    <div className="card-item ac">
-                        <div className="card-item-image">
-                            <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1202&q=80" alt="" srcset="" />
-                        </div>
-                        <div className="card-item-col">
-                            <div className="card-item-row ai jc-space ml-10">
-                                <div className="card-item-title">
-                                    Comida 1
-                                </div>
-                                <div className="card-item-value">
-                                    R$ 10,00
-                                </div>
-                            </div>
-                            <div className="card-item-description ml-10">
-                                Hamburguer com tudo o que se pode desejar de mais gostoso neste mundo...
-                                </div>
-                        </div>
-                    </div>
-
-                    <div className="card-item ac">
-                        <div className="card-item-image">
-                            <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1202&q=80" alt="" srcset="" />
-                        </div>
-                        <div className="card-item-col">
-                            <div className="card-item-row ai jc-space ml-10">
-                                <div className="card-item-title">
-                                    Comida 1
-                                </div>
-                                <div className="card-item-value">
-                                    R$ 10,00
-                                </div>
-                            </div>
-                            <div className="card-item-description ml-10">
-                                Hamburguer com tudo o que se pode desejar de mais gostoso neste mundo...
-                                </div>
-                        </div>
-                    </div>
-
-                    <div className="card-item ac">
-                        <div className="card-item-image">
-                            <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1202&q=80" alt="" srcset="" />
-                        </div>
-                        <div className="card-item-col">
-                            <div className="card-item-row ai jc-space ml-10">
-                                <div className="card-item-title">
-                                    Comida 1
-                                </div>
-                                <div className="card-item-value">
-                                    R$ 10,00
-                                </div>
-                            </div>
-                            <div className="card-item-description ml-10">
-                                Hamburguer com tudo o que se pode desejar de mais gostoso neste mundo...
-                                </div>
-                        </div>
-                    </div>
+                            </Link>
+                        );
+                    })}
 
                 </div>
             </div>

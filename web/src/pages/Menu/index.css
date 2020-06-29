@@ -10,29 +10,33 @@
   grid-gap: 16px;
 }
 
+.cards a {
+  text-decoration: none;
+}
+
 .card-item {
   display: flex;
+  flex-direction: column;
   border-radius: 8px;
   background-color: #FFF;
-  -webkit-box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.4);
-  -moz-box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.4);
-  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.4);
+  border: 2px solid #eee;
   transition: 400ms;
 }
 
 .card-item:hover {
-  background-color: #ddd;
+  border: 2px solid #aaa;
   cursor: pointer;
 }
 
 .card-item-image {
-  display: flex;
+  flex: 1;
+  display: block;
+  pointer-events: none;
 }
 
 .card-item-image img {
-  width: 128px;
-  height: auto;
-  border-radius: 8px 0px 0px 8px;
+  width: 100%;
+  border-radius: 8px 8px 0px 0px;
 }
 
 .card-item-row {
@@ -41,8 +45,10 @@
 }
 
 .card-item-col {
+  flex: 1;
   display: flex;
   flex-direction: column;
+  pointer-events: none;
 }
 
 .card-item-title {
@@ -62,9 +68,19 @@
   color: #E20030;
 }
 
+.card-item-value-discount {
+  font-size: 12px;
+  color: #666;
+  text-decoration: line-through;
+}
+
 .card-item-description {
   font-size: 14px;
   color: #666;
+}
+
+.pg-10 {
+  padding: 10px;
 }
 
 .ml-10 {
@@ -103,7 +119,7 @@
   transition: 400ms;
 }
 
-.categories{
+.categories {
   margin-bottom: 32px;
 }
 
@@ -124,10 +140,58 @@
   border-right: 1px solid #E20030;
 }
 
-.category-item::active {
+.category-item:hover:first-child {
   color: #FFF;
   font-weight: bold;
   background-color: #E20030;
+  border-left: 1px solid #E20030;
+  border-right: 1px solid #E20030;
+  border-radius: 16px 0 0 16px;
+}
+
+.category-item:hover:last-child {
+  color: #FFF;
+  font-weight: bold;
+  background-color: #E20030;
+  border-left: 1px solid #E20030;
+  border-right: 1px solid #E20030;
+  border-radius: 0 16px 16px 0;
+}
+
+.category-item:hover:only-child {
+  color: #FFF;
+  font-weight: bold;
+  background-color: #E20030;
+  border-left: 1px solid #E20030;
+  border-right: 1px solid #E20030;
+  border-radius: 16px 16px 16px 16px;
+}
+
+.category-item.active {
+  color: #FFF;
+  font-weight: bold;
+  background-color: #E20030;
+}
+
+.category-item.active:first-child {
+  color: #FFF;
+  font-weight: bold;
+  background-color: #E20030;
+  border-radius: 16px 0 0 16px;
+}
+
+.category-item.active:last-child {
+  color: #FFF;
+  font-weight: bold;
+  background-color: #E20030;
+  border-radius: 0 16px 16px 0;
+}
+
+.category-item.active:only-child {
+  color: #FFF;
+  font-weight: bold;
+  background-color: #E20030;
+  border-radius: 16px 16px 16px 16px;
 }
 
 .category-title {
