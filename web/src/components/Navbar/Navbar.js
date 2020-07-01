@@ -1,7 +1,8 @@
 import React from 'react';
 import logo from '../../assets/logo.svg';
 import './Navbar.css';
-import { FaShoppingBag } from 'react-icons/fa';
+
+import ShoppingCart from '../ShoppingCart/index';
 
 import { NavLink, Link } from 'react-router-dom';
 
@@ -20,10 +21,7 @@ function Navbar() {
                     <li><NavLink activeClassName="active" className="nav-item" to="/menu">Menu</NavLink></li>
                     <li><NavLink activeClassName="active" className="nav-item" to="/contact">Contato</NavLink></li>
                     <li>
-                        <div className="nav-item nav-bag">
-                            <FaShoppingBag size={16} color="#FFF" />                            
-                            <div className="items-buy">1</div>
-                        </div>
+                       <ShoppingCart /> 
                     </li>
                     {/* <li><NavLink activeClassName="active" className="nav-item" to="#">Cadastre-se</NavLink></li> */}
                 </ul>
