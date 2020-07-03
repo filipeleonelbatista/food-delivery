@@ -3,12 +3,15 @@ import './ShoppingCart.css';
 
 import { FaShoppingBag } from 'react-icons/fa';
 
-function Navbar() {
-    const [counter, setCounter] = useState(0)
 
-    function counterAdd() {
-        setCounter(...counter + 1);
+
+function ShoppingCart() {
+    const [shoppingList, setShoppingList] = useState([])
+
+    function addToList(item) {
+        setShoppingList([...shoppingList, item]);
     }
+
     function showBag() {
         const bag = document.getElementById('bag');
         bag.classList.toggle('hide');
@@ -17,11 +20,11 @@ function Navbar() {
         <>
             <div className="nav-item nav-bag" onClick={showBag}>
                 <FaShoppingBag size={16} color="#FFF" />
-                {counter > 0 ? (<div className="items-buy">{counter}</div>) : ("")}
+                {shoppingList.length > 0 ? (<div className="items-buy">{shoppingList.length}</div>) : ("")}
             </div>
             <div id="bag" className="hide floating-list">
                 {
-                    counter === 0 ? (
+                    shoppingList.length === 0 ? (
                         <>
                             <div className="col">
                                 <div className="fl-item">
@@ -31,7 +34,7 @@ function Navbar() {
                                         <div className="fl-item-value">R$ 15,50</div>
                                     </div>
                                     <div className="fl-opt-title">Opcionais</div>
-                                    <div className="opt">     
+                                    <div className="opt">
                                         <div className="fl-opt-qtd">3x</div>
                                         <div className="fl-opt-name">Queijo</div>
                                         <div className="fl-opt-value">R$ 1,50</div>
@@ -58,5 +61,5 @@ function Navbar() {
     );
 }
 
-export default Navbar;
+export default ShoppingCart;
 
