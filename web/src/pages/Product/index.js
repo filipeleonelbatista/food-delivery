@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import './index.css';
 
+import { Link } from 'react-router-dom';
+
 import api from '../../services/api';
 
 import { FaPlus, FaMinus } from 'react-icons/fa';
@@ -18,7 +20,33 @@ function Menu(request) {
             setOpt(response.data.opt);
         })
     }, [request.match.params.id]);
+    function addprod() {
+        const item = document.getElementById("product-qtd");
+        item.value = parseInt(item.value) + 1;
+    }
+    function removeprod() {
+        const item = document.getElementById("product-qtd");
+        if (parseInt(item.value) === 0) {
+            item.value = 0;
+        }
+        if (parseInt(item.value) > 0) {
+            item.value = parseInt(item.value) - 1;
+        }
+    }
 
+    function addqtd(event) {
+        const item = document.getElementById("opt-qtd-" + event.target.id);
+        item.value = parseInt(item.value) + 1;
+    }
+    function removeqtd(event) {
+        const item = document.getElementById("opt-qtd-" + event.target.id);
+        if (parseInt(item.value) === 0) {
+            item.value = 0;
+        }
+        if (parseInt(item.value) > 0) {
+            item.value = parseInt(item.value) - 1;
+        }
+    }
     function handleAddToList(event) {
         let p = {
             id: product[0].id,
@@ -49,7 +77,7 @@ function Menu(request) {
             o
         }
 
-        console.log(item)
+        console.log(item);
     }
     return (
         <>
@@ -78,9 +106,9 @@ function Menu(request) {
                                     </div>
 
                                     <div className="item-select">
-                                        <button className="ripple"><FaPlus /></button>
+                                        <button onClick={addprod} className="ripple"><FaPlus /></button>
                                         <input id="product-qtd" type="text" value="1" />
-                                        <button className="ripple"><FaMinus /></button>
+                                        <button onClick={removeprod} className="ripple"><FaMinus /></button>
 
                                     </div>
                                 </div>
@@ -103,9 +131,9 @@ function Menu(request) {
                                                     R$ {option.value}
                                                 </div>
                                                 <div className="item-select">
-                                                    <button className="ripple"><FaPlus /></button>
+                                                    <button id={option.id} onClick={addqtd} className="ripple"><FaPlus /></button>
                                                     <input id={"opt-qtd-" + option.id} type="text" value="0" />
-                                                    <button className="ripple"><FaMinus /></button>
+                                                    <button id={option.id} onClick={removeqtd} className="ripple"><FaMinus /></button>
 
                                                 </div>
                                             </div>
@@ -116,7 +144,11 @@ function Menu(request) {
 
                         </div>
                         <div className="row aic jcc mb10">
-                            <button onClick={handleAddToList} className="add">Adicionad ao pedido</button>
+                            <Link className="button-link" to="/menu">
+                                <button onClick={handleAddToList} className="add">
+                                    Adicionar ao pedido
+                                </button>
+                            </Link>
                         </div>
                     </div>
                 )

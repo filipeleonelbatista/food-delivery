@@ -152,6 +152,14 @@
   transition: background 0s;
 }
 
+a.button-link{
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  text-decoration: none;
+}
+
 .add {
   font-size: 18px;
   font-weight: bold;
@@ -172,4 +180,9 @@
   background-color: #e4244e;
   background-size: 100%;
   transition: background 0s;
+}
+
+button svg,
+  button svg path{  
+  pointer-events: none;
 }
