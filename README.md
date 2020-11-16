@@ -32,6 +32,7 @@ Esse projeto foi desenvolvido com as seguintes tecnologias:
 
 O Food Delivery é um projeto que visa auxiliar pequenos restaurantes a organizar 
 pedidos e controlar as entregas.
+
 ---
 
 <p align="center">  
